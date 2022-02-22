@@ -1,0 +1,46 @@
+<div mat-dialog-content>
+    <form [formGroup]="myForm" class="example-form" >
+      <table class="example-full-width" cellspacing="1">
+        <tr>
+          <!-- FirstName Field -->
+          <td>
+              <mat-form-field class="example-full-width"  appearance="outline">
+                <mat-label>Doctor name</mat-label>
+                <input matInput formControlName="FirstName" id="FirstName"  required>
+                <mat-error *ngIf="myError('FirstName', 'required')">Name is required</mat-error>
+                <mat-error *ngIf="myError('FirstName', 'maxlength')">Not more than 20 characters</mat-error>
+                <mat-error *ngIf="myError('FirstName', 'pattern')">Numbers are not allowed</mat-error>
+              </mat-form-field>
+          <td>
+        </tr>
+      </table>
+      <table class="example-full-width">
+        <tr>
+          <!-- Date of Birth Field -->
+          <td>
+            <mat-form-field class="example-full-width"  appearance="outline">
+              <mat-label>Date</mat-label>
+                <input matInput formControlName="Date" id="Date" required>
+                <mat-error *ngIf="myError('Date', 'required')">Date is required</mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <td>  
+            <mat-form-field class="example-full-width" appearance="fill">
+              <mat-label>Report</mat-label>
+                <input matInput formControlName="LabTest" id="LabTest" required>
+                <mat-error *ngIf="myError('LabTest', 'required')">Report is required</mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      
+          <button mat-raised-button (click)="save(myForm.value)"  color="primary" style="margin:10px" >Save</button>
+          <!-- Button for editing the patient data -->
+          <button mat-raised-button (click)="onNoClick()" color="accent" style="margin:10px" >Cancel</button>
+    </form>
+
+</div>

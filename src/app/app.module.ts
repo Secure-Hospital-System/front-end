@@ -19,6 +19,8 @@ import { ViewAppointmentComponent } from './view-appointment/view-appointment.co
 import { ReportsComponent } from './reports/reports.component';
 import { InsuranceComponent } from './insurance/insurance.component';
 import { PaymentComponent } from './payment/payment.component';
+import { ReportDialogComponent } from './report-dialog/report-dialog.component';
+import { ReportDialogComponent3 } from './report-dialog/report-dialog.component';
 
 @NgModule({
   declarations: [
@@ -30,7 +32,10 @@ import { PaymentComponent } from './payment/payment.component';
     ViewAppointmentComponent,
     ReportsComponent,
     InsuranceComponent,
-    PaymentComponent
+    PaymentComponent,
+    ReportDialogComponent,
+    ReportDialogComponent3,
+    ReportDialogComponent,
   ],
   imports: [
     BrowserModule,

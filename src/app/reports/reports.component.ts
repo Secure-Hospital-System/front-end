@@ -1,4 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import {AfterViewInit, Component, OnInit, Injectable, Input, ViewChild} from '@angular/core';
+
+//Inserting the MatTable Paginator and MatTable DataSource Module
+import {MatTableDataSource} from '@angular/material/table';
+import { ReportDialogComponent } from '../report-dialog/report-dialog.component';
 
 export interface PeriodicElement {
   date: string;
@@ -27,12 +31,58 @@ const ELEMENT_DATA: PeriodicElement[] = [
 })
 
 export class ReportsComponent implements OnInit {
-  displayedColumns: string[] = ['position', 'date', 'report', 'doctor'];
-  dataSource = ELEMENT_DATA;
+  displayedColumns: string[] = ['position', 'date', 'report', 'doctor','action'];
+  dataSource = new MatTableDataSource(ELEMENT_DATA)
+
+
+  @ViewChild(ReportDialogComponent) dialog!: ReportDialogComponent;
 
   constructor() { }
 
   ngOnInit(): void {
+  }
+
+  delete(data:any){
+    var value = this.dataSource.data.filter(function(item) {
+      return item !== data
+    })
+    this.dataSource.data = value
+  }
+
+  edit(data:any){
+    this.dialog.openDialog(data,"edit")
+  }
+
+  add(data:any){
+    var values = this.dataSource.data
+    if (data[1]=="create"){
+      var position = values.length+1
+      values.push({
+        "doctor":data[0].FirstName,
+        "report":data[0].LabTest,
+        "date":data[0].Date,
+        "position":position
+      })
+    }
+    else if (data[1]=="edit"){
+      var curpos = data[2]-1
+      values[curpos]={
+        "doctor":data[0].FirstName,
+        "report":data[0].LabTest,
+        "date":data[0].Date,
+        "position":curpos
+      };
+    }
+    this.dataSource.data =values
+  }
+
+  create(){
+    var data = {"doctor":"",
+        "report":"",
+        "date":"",
+        "position":""}
+    this.dialog.openDialog(data,"create")
+
   }
 
 }
