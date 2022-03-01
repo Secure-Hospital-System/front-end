@@ -1,1 +1,112 @@
-<p>insurance works!</p>
+<mat-tab-group color="warn" backgroundColor="primary">
+  <mat-tab label="Claim New Insurance">
+    <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
+      <!-- Checkbox Column -->
+      <ng-container matColumnDef="select">
+        <th mat-header-cell *matHeaderCellDef>
+          <mat-checkbox (change)="$event ? masterToggle() : null"
+                        [checked]="selection.hasValue() && isAllSelected()"
+                        [indeterminate]="selection.hasValue() && !isAllSelected()"
+                        [aria-label]="checkboxLabel()">
+          </mat-checkbox>
+        </th>
+        <td mat-cell *matCellDef="let row">
+          <mat-checkbox (click)="$event.stopPropagation()"
+                        (change)="$event ? add(row,selection.isSelected(row)) : null"
+                        [checked]="selection.isSelected(row)"
+                        [aria-label]="checkboxLabel(row)">
+          </mat-checkbox>
+        </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+
+      </ng-container>
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> No. </th>
+        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+        <td mat-footer-cell *matFooterCellDef><span>Total Claim Amount</span></td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Type of Claim  </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+        <td mat-footer-cell *matFooterCellDef></td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef> Amount </th>
+        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+        <td mat-footer-cell *matFooterCellDef>{{total}}</td>
+      </ng-container>
+
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"
+          (click)="selection.toggle(row)">
+      </tr>
+      <tr mat-footer-row *matFooterRowDef="displayedColumns"></tr>
+
+    </table>
+
+  </mat-tab>
+  <mat-tab label="Past Claim Insurances">
+    <table mat-table [dataSource]="dataSource">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> Bill </th>
+        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef>  Date of Request </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef> Date of Approve </th>
+        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef > Claim Amount </th>
+        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+      </ng-container>
+
+      <!-- Cost Column -->
+      <ng-container matColumnDef="charges">
+        <th mat-header-cell *matHeaderCellDef > Approved Amount </th>
+        <td mat-cell *matCellDef="let element"> {{element.charges}} </td>
+      </ng-container>
+
+      <!-- NextAppointment Column -->
+      <ng-container matColumnDef="NextAppointment">
+        <th mat-header-cell *matHeaderCellDef > Approver  </th>
+        <td mat-cell *matCellDef="let element"> {{element.NextAppointment}} </td>
+      </ng-container>
+
+      <!-- Status Column -->
+      <ng-container matColumnDef="Status">
+        <th mat-header-cell *matHeaderCellDef > Status  </th>
+        <td mat-cell *matCellDef="let element"> {{element.Status}} </td>
+      </ng-container>
+
+
+      <!-- For Diaplaying table data-->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns1"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns1;"></tr>
+    </table>
+
+    <!-- Setting the paginator value for the table -->
+    <mat-paginator [pageSizeOptions]="[10, 20, 30]"
+                  showFirstLastButtons
+                  aria-label="Select page of periodic elements">
+    </mat-paginator>
+  </mat-tab>
+</mat-tab-group>
+
