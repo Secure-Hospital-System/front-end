@@ -21,6 +21,13 @@ import { InsuranceComponent } from './insurance/insurance.component';
 import { PaymentComponent } from './payment/payment.component';
 import { ReportDialogComponent } from './report-dialog/report-dialog.component';
 import { ReportDialogComponent3 } from './report-dialog/report-dialog.component';
+import { UserComponent } from './user/user.component';
+import { DoctorComponent } from './doctor/doctor.component';
+import { TableComponent } from './table/table.component';
+import { DialogComponent } from './dialog/dialog.component';
+import { DialogOverviewExampleDialog } from './dialog/dialog.component';
+import { PrescriptionDialogComponent } from './prescription-dialog/prescription-dialog.component';
+import { DialogOverviewExampleDialog1 } from './prescription-dialog/prescription-dialog.component';
 
 @NgModule({
   declarations: [
@@ -36,6 +43,13 @@ import { ReportDialogComponent3 } from './report-dialog/report-dialog.component'
     ReportDialogComponent,
     ReportDialogComponent3,
     ReportDialogComponent,
+    UserComponent,
+    TableComponent,
+    DialogComponent,
+    DialogOverviewExampleDialog,
+    PrescriptionDialogComponent,
+    DialogOverviewExampleDialog1,
+    DoctorComponent
   ],
   imports: [
     BrowserModule,
@@ -43,7 +57,7 @@ import { ReportDialogComponent3 } from './report-dialog/report-dialog.component'
     FlexLayoutModule,
     MatButtonModule,
     BrowserAnimationsModule,
-    FormsModule, 
+    FormsModule,
     ReactiveFormsModule,
     MatNativeDateModule,
     HttpClientModule,

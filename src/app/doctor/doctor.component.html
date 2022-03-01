@@ -1,0 +1,155 @@
+<!-- Patient Info Form -->
+<div class ="grid-container">
+    <div class="grid-child1">
+      <mat-card>
+        <!-- Patient Title -->
+        <mat-card-header>
+          <mat-card-title>Patients Info</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form">
+            <form [formGroup]="myForm" class="example-form" >
+              <table class="example-full-width" cellspacing="1">
+                <tr>
+                  <!-- FirstName Field -->
+                  <td>
+                      <mat-form-field class="example-full-width"  appearance="outline">
+                        <mat-label>First name</mat-label>
+                        <input matInput formControlName="FirstName" id="FirstName" >
+                        <mat-error *ngIf="myError('FirstName', 'required')">Name is required</mat-error>
+                        <mat-error *ngIf="myError('FirstName', 'maxlength')">Not more than 20 characters</mat-error>
+                        <mat-error *ngIf="myError('FirstName', 'pattern')">Numbers are not allowed</mat-error>
+                      </mat-form-field>
+                    
+                  <td>
+                  <!-- LastName Field -->
+                  <td>
+                    <mat-form-field class="example-full-width" style="padding-left: 40px" appearance="outline" >
+                      <mat-label>Last name</mat-label>
+                      <input matInput formControlName="LastName" id="LastName">
+                      <mat-error *ngIf="myError('LastName', 'required')">Last Name is required</mat-error>
+                      <mat-error *ngIf="myError('LastName', 'maxlength')">Not more than 20 characters</mat-error>
+                      <mat-error *ngIf="myError('LastName', 'pattern')">Numbers are not allowed</mat-error>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </table>
+              <table>
+                <tr>
+                  <!-- Date of Birth Field -->
+                  <td>
+                    <mat-form-field class="example-full-width"  appearance="outline">
+                      <mat-label>Date of Birth</mat-label>
+                        <input matInput [matDatepicker]="picker" formControlName="Date" id="Date" >
+                        <mat-error *ngIf="myError('Date', 'required')">Date is required</mat-error>
+                        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                        <mat-datepicker #picker></mat-datepicker>
+                    </mat-form-field>
+                  </td>
+                  <!-- Age Field -->
+                  <td>
+                    <mat-form-field class="example-full-width" style="padding-left:50px" appearance="outline">
+                      <mat-label>Age</mat-label>
+                      <input matInput formControlName="Age" id="Age">
+                      <mat-error *ngIf="myError('Age', 'required')">Age is required</mat-error>
+                      <mat-error *ngIf="myError('Age', 'pattern')">Alphabets are not allowed</mat-error>
+                    </mat-form-field>
+                  </td>
+                <tr>
+                  <!-- Gender Field -->
+                  <td>
+                    <section class="example-full-width">
+                      <mat-label class="example-full-width" style="padding-right:10px ">Gender:</mat-label>
+                      <mat-radio-group formControlName="Gender" id="Gender">
+                        <mat-radio-button class="example-margin"  value="Male"style="padding-right:10px">Male</mat-radio-button>
+                        <mat-radio-button class="example-margin"  value="Female"style="padding-right:10px">Female</mat-radio-button>
+                      </mat-radio-group>
+                    </section>
+                  </td>
+                  <!-- BloodGroup Field -->
+                  <td>
+                    <mat-form-field class="example-full-width" style="padding-left: 50px"appearance="outline">
+                      <mat-label >Blood Group</mat-label>
+                      <input matInput formControlName="BloodGroup" id="BloodGroup">
+                      <mat-error *ngIf="myError('BloodGroup', 'required')">BloodGroup is required</mat-error>
+                      <mat-error *ngIf="myError('BloodGroup', 'maxlength')">Not more than 3 characters</mat-error>
+                      <mat-error *ngIf="myError('BloodGroup', 'pattern')">Numbers are not allowed</mat-error>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </table>
+              <table>
+                <tr>
+                  <td>
+                    <!-- Address1 Field -->
+                    <mat-form-field class="example-full-width"  appearance="outline">
+                      <mat-label>Address</mat-label>
+                      <textarea matInput placeholder="Ex. 100 Main St" formControlName="Address1" id="Address1"></textarea>
+                        <mat-error *ngIf="myError('Address1', 'required')">Address is required</mat-error>
+                        <mat-error *ngIf="myError('Address1', 'maxlength')">Not more than 50 characters</mat-error>
+                    </mat-form-field>
+                  </td>
+                  <td>
+                    <!-- Address2 Field -->
+                    <mat-form-field class="example-full-width" style="padding-left: 60px" appearance="outline">
+                      <mat-label>Address 2</mat-label>
+                      <textarea matInput formControlName="Address2" id="Address2"></textarea>
+                      <mat-error *ngIf="myError('Address2', 'maxlength')">Not more than 50 characters</mat-error>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </table>
+              <table class="example-full-width"  >
+                <tr>
+                  <!-- City Field -->
+                  <td>
+                    <mat-form-field class="example-full-width"appearance="outline" >
+                    <mat-label>City</mat-label>
+                    <input matInput placeholder="Ex. San Francisco" formControlName="City" id="City">
+                    <mat-error *ngIf="myError('City', 'required')">City is required</mat-error>
+                    <mat-error *ngIf="myError('City', 'maxlength')">Not more than 20 characters</mat-error>
+                    <mat-error *ngIf="myError('City', 'pattern')">Numbers are not allowed</mat-error>
+                    </mat-form-field>
+                  </td>
+                  <!-- State Field -->
+                  <td>
+                    <mat-form-field class="example-full-width" style="padding-left: 50px" appearance="outline">
+                    <mat-label>State</mat-label>
+                    <input matInput placeholder="Ex. California" formControlName="State" id="State">
+                    <mat-error *ngIf="myError('State', 'required')">State is required</mat-error>
+                    <mat-error *ngIf="myError('State', 'maxlength')">Not more than 20 characters</mat-error>
+                    <mat-error *ngIf="myError('State', 'pattern')">Numbers are not allowed</mat-error>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </table>
+              <table class="example-full-width" cellspacing="0">
+                <tr>
+                  <!-- Postalcode Field -->
+                  <td>
+                    <mat-form-field class="example-full-width"  appearance="outline">
+                    <mat-label>Postal Code</mat-label>
+                    <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" formControlName="PostalCode" id="PostalCode">
+                    <mat-hint >{{postalCode.value.length}} / 5</mat-hint>
+                    <mat-error *ngIf="myError('PostalCode', 'required')">PostalCode is required</mat-error>
+                    <mat-error *ngIf="myError('PostalCode', 'pattern')">Alphabets are not allowed</mat-error>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </table>
+              <!-- Button for saving the patient data -->
+              <button mat-raised-button (click)= "save(myForm.value)"  color="primary" style="margin:10px" >Save</button>
+              <!-- Button for editing the patient data -->
+              <button mat-raised-button (click)="edit()" color="accent" style="margin:10px" >Edit</button>       
+            </form>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+    <!-- Prescription and Diagnosis Table -->
+    <div class="grid-child2">
+      <app-table user="doctor"></app-table>
+    </div>
+</div>
+  
+  

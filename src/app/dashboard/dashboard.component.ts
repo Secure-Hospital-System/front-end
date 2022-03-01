@@ -21,7 +21,7 @@ export class DashboardComponent implements OnInit {
     {
       title: 'User Profile',
       icon: 'person',
-      redirectUrl: '',
+      redirectUrl: '/patients',
     },
     {
       title: 'Reports',
@@ -41,12 +41,12 @@ export class DashboardComponent implements OnInit {
     {
       title: 'Diagnosis',
       icon: 'storage',
-      redirectUrl: '',
+      redirectUrl: '/diagnosis',
     },
     {
       title: 'Prescription',
       icon: 'description',
-      redirectUrl: '',
+      redirectUrl: '/prescription',
     },
   ];
 

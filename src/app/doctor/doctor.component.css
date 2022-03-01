@@ -1,0 +1,44 @@
+.example-form {
+    width: 100%;
+    padding-top: 1px;
+  }
+  .example-full-width {
+    width: 250px;
+  }
+  .form{
+    width: 100%;
+    margin-top: 10px
+  }
+    
+  td {
+    padding-right: 8px;
+  }
+  .mat-card {
+    padding: 0px !important;
+    width: 100%;
+  }
+  
+  .mat-card-header {
+    background-color: grey;
+    color: white;
+    border-radius: 4px 4px 0 0;
+    width: 100%;
+  }
+  .mat-card-title {
+    font-weight: 100 !important;
+    margin: 8px 0px !important;
+    width: 100%;
+  }
+  
+  .mat-card-content {
+    padding: 16px;
+    width: 100%;
+  }
+  .grid-container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+  }
+  .grid-child1{
+    padding: 10px
+  }
