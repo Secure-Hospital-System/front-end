@@ -48,7 +48,13 @@ export class DashboardComponent implements OnInit {
       icon: 'description',
       redirectUrl: '/prescription',
     },
+    {
+      title: 'Chatbot',
+      icon: 'chat',
+      redirectUrl: '/chat',
+    },
   ];
+
 
   constructor() {}
 

@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AppointmentComponent } from './appointment/appointment.component';
-
+import { ChatbotComponent } from './chatbot/chatbot.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { InsuranceComponent } from './insurance/insurance.component';
 import { PaymentComponent } from './payment/payment.component';
@@ -44,6 +44,10 @@ const routes: Routes = [
   {
     path: 'reports',
     component: ReportsComponent,
+  },
+  {
+    path: 'chat',
+    component: ChatbotComponent,
   },
   {
     path: '**',

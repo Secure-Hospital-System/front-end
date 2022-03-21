@@ -8,6 +8,7 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MaterialModule } from './material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon'
 
 import {MatButtonModule} from '@angular/material/button';
 import { AppointmentComponent } from './appointment/appointment.component';
@@ -29,6 +30,12 @@ import { DialogOverviewExampleDialog } from './dialog/dialog.component';
 import { PrescriptionDialogComponent } from './prescription-dialog/prescription-dialog.component';
 import { DialogOverviewExampleDialog1 } from './prescription-dialog/prescription-dialog.component';
 
+import { ChatComponent } from './chat/chat.component';
+import { ChatService } from './chat/chat.service';
+import { MessageComponent } from './message/message.component';
+import { CommonModule } from '@angular/common';
+import { ChatbotComponent } from './chatbot/chatbot.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -49,7 +56,10 @@ import { DialogOverviewExampleDialog1 } from './prescription-dialog/prescription
     DialogOverviewExampleDialog,
     PrescriptionDialogComponent,
     DialogOverviewExampleDialog1,
-    DoctorComponent
+    DoctorComponent,
+    ChatComponent,
+    MessageComponent,
+    ChatbotComponent
   ],
   imports: [
     BrowserModule,
@@ -61,10 +71,12 @@ import { DialogOverviewExampleDialog1 } from './prescription-dialog/prescription
     ReactiveFormsModule,
     MatNativeDateModule,
     HttpClientModule,
-    AppRoutingModule
+    MatIconModule,
+    AppRoutingModule,
+    CommonModule
   ],
   // exports: [MaterialModule],
-  // providers: [MaterialModule],
+  providers: [ChatService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
