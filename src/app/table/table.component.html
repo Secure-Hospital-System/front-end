@@ -1,0 +1,155 @@
+<!-- Diagnosis Table -->
+<div class="table1">
+  <mat-card>
+
+    <!-- Table Title -->
+    <mat-card-header>
+      <mat-card-title>Diagnosis Details</mat-card-title>
+      <ng-template [ngIf]= "show">
+        <div>
+          <app-dialog user="diagnosis" (datachange)= "add($event)" btnname="Create" (click)="create()" style="margin-left:300px"></app-dialog>
+        </div>
+      </ng-template>
+    </mat-card-header>
+    <mat-card-content>
+
+    <!-- Inserting the data source -->
+    <table mat-table [dataSource]="dataSource">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> Date. </th>
+        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Doctor Name </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef> Diagnosis Report </th>
+        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef > Test </th>
+        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+      </ng-container>
+
+      <!-- Charges Column -->
+      <ng-container matColumnDef="charges">
+        <th mat-header-cell *matHeaderCellDef > charges </th>
+        <td mat-cell *matCellDef="let element"> {{element.charges}} </td>
+      </ng-container>
+
+      <!-- NextAppointment Column -->
+      <ng-container matColumnDef="NextAppointment">
+        <th mat-header-cell *matHeaderCellDef > Next appointment </th>
+        <td mat-cell *matCellDef="let element"> {{element.NextAppointment}} </td>
+      </ng-container>
+
+      <ng-template [ngIf]= "show">
+        <div>
+          <ng-container matColumnDef="action">
+            <th mat-header-cell *matHeaderCellDef> Action </th>
+            <td mat-cell *matCellDef="let element" class="action-link">
+              <app-dialog user="diagnosis" btnname="Edit" (click) = "edit(element)" ></app-dialog>
+              <button mat-raised-button color="warn" (click)="delete(element)">Delete</button>
+            </td>
+          </ng-container>
+        </div>
+      </ng-template>
+      <!-- For Diaplaying table data-->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <!-- Setting the paginator value for the table -->
+    <mat-paginator [pageSizeOptions]="[3, 6, 9]"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic elements">
+    </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>
+
+<!-- Prescription Table  -->
+<div class="table2">
+  <mat-card>
+    <mat-card-header>
+
+      <!-- Table Title -->
+      <mat-card-title>Prescription Details</mat-card-title>
+
+      <ng-template [ngIf]= "show">
+        <div>
+          <app-prescription-dialog user="prescription" (datachange)= "add1($event)" btnname="Create" (click)="create1()" style="margin-left:280px"></app-prescription-dialog>
+        </div>
+      </ng-template>
+    </mat-card-header>
+    <mat-card-content>
+
+    <!-- Inserting the data source -->
+    <table mat-table [dataSource]="dataSource">
+
+      <!-- Position Column -->
+      <ng-container matColumnDef="position">
+        <th mat-header-cell *matHeaderCellDef> Date </th>
+        <td mat-cell *matCellDef="let element"> {{element.position}} </td>
+      </ng-container>
+
+      <!-- Name Column -->
+      <ng-container matColumnDef="name">
+        <th mat-header-cell *matHeaderCellDef> Prescription Report </th>
+        <td mat-cell *matCellDef="let element"> {{element.name}} </td>
+      </ng-container>
+
+      <!-- Weight Column -->
+      <ng-container matColumnDef="weight">
+        <th mat-header-cell *matHeaderCellDef> No. of Days </th>
+        <td mat-cell *matCellDef="let element"> {{element.weight}} </td>
+      </ng-container>
+
+      <!-- Symbol Column -->
+      <ng-container matColumnDef="symbol">
+        <th mat-header-cell *matHeaderCellDef > Quantity </th>
+        <td mat-cell *matCellDef="let element"> {{element.symbol}} </td>
+      </ng-container>
+
+      <!-- Cost Column -->
+      <ng-container matColumnDef="charges">
+        <th mat-header-cell *matHeaderCellDef > Cost </th>
+        <td mat-cell *matCellDef="let element"> {{element.charges}} </td>
+      </ng-container>
+
+      <!-- NextAppointment Column -->
+      <ng-container matColumnDef="NextAppointment">
+        <th mat-header-cell *matHeaderCellDef > Discount  </th>
+        <td mat-cell *matCellDef="let element"> {{element.NextAppointment}} </td>
+      </ng-container>
+
+      <ng-container matColumnDef="action">
+        <th mat-header-cell *matHeaderCellDef> Action </th>
+        <td mat-cell *matCellDef="let element" class="action-link">
+          <app-prescription-dialog user="prescription" btnname="Edit" (click) = "edit1(element)" ></app-prescription-dialog>
+          <button mat-raised-button color="warn" (click)="delete(element)">Delete</button>
+        </td>
+      </ng-container>
+
+      <!-- For Diaplaying table data-->
+      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+    </table>
+
+    <!-- Setting the paginator value for the table -->
+    <mat-paginator [pageSizeOptions]="[3, 6, 9]"
+                   showFirstLastButtons
+                   aria-label="Select page of periodic elements">
+    </mat-paginator>
+    </mat-card-content>
+  </mat-card>
+</div>

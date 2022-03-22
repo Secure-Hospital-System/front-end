@@ -1,11 +1,12 @@
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AppointmentComponent } from './appointment/appointment.component';
-
+import { ChatbotComponent } from './chatbot/chatbot.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { InsuranceComponent } from './insurance/insurance.component';
 import { PaymentComponent } from './payment/payment.component';
 import { ReportsComponent } from './reports/reports.component';
+import { UserComponent } from './user/user.component';
 
 const routes: Routes = [
   {
@@ -20,7 +21,18 @@ const routes: Routes = [
     path: 'appointments',
     component: AppointmentComponent,
   },
-
+  {
+    path: 'patients',
+    component: UserComponent,
+  },
+  {
+    path: 'diagnosis',
+    component: UserComponent,
+  },
+  {
+    path: 'prescription',
+    component: UserComponent,
+  },
   {
     path: 'insurance',
     component: InsuranceComponent,
@@ -34,9 +46,13 @@ const routes: Routes = [
     component: ReportsComponent,
   },
   {
+    path: 'chat',
+    component: ChatbotComponent,
+  },
+  {
     path: '**',
     component: DashboardComponent,
-  },
+  }
 ];
 
 @NgModule({

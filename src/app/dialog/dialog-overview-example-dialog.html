@@ -1,0 +1,49 @@
+<div mat-dialog-content>
+    <form [formGroup]="myForm" class="example-form" >
+      <table class="example-full-width" cellspacing="1">
+        <tr>
+          <!-- FirstName Field -->
+          <td>
+              <mat-form-field class="example-full-width"  appearance="outline">
+                <mat-label>Doctor name</mat-label>
+                <input matInput formControlName="FirstName" id="FirstName" >
+                <mat-error *ngIf="myError('FirstName', 'required')">Name is required</mat-error>
+                <mat-error *ngIf="myError('FirstName', 'maxlength')">Not more than 20 characters</mat-error>
+                <mat-error *ngIf="myError('FirstName', 'pattern')">Numbers are not allowed</mat-error>
+              </mat-form-field>
+          <td>
+        </tr>
+      </table>
+      <table class="example-full-width">
+        <tr>
+          <!-- Date of Birth Field -->
+          <td>
+            <mat-form-field class="example-full-width"  appearance="outline">
+              <mat-label>Date</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="Date" id="Date" >
+                <mat-error *ngIf="myError('Date', 'required')">Date is required</mat-error>
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <table>
+        <tr>
+          <td>
+            <!-- Diagnosis Field -->
+            <mat-form-field class="example-full-width"  appearance="outline">
+              <mat-label>Diagnosis</mat-label>
+              <textarea matInput placeholder="Ex. 100 Main St" formControlName="Diagnosis" id="Diagnosis"></textarea>
+                <mat-error *ngIf="myError('Diagnosis', 'required')">Diagnosis is required</mat-error>
+                <mat-error *ngIf="myError('Diagnosis', 'maxlength')">Not more than 50 characters</mat-error>
+            </mat-form-field>
+          </td>
+        </tr>
+      </table>
+      <button mat-raised-button (click)="save(myForm.value)"  color="primary" style="margin:10px" >Save</button>
+      <!-- Button for editing the patient data -->
+      <button mat-raised-button (click)="onNoClick()" color="accent" style="margin:10px" >Cancel</button>
+    </form>
+
+</div>

@@ -18,10 +18,12 @@
     "@angular/flex-layout": "^13.0.0-beta.38",
     "@angular/forms": "~12.1.0-",
     "@angular/material": "^13.2.1",
+    "@angular/material-moment-adapter": "^9.2.2",
     "@angular/platform-browser": "~12.1.0-",
     "@angular/platform-browser-dynamic": "~12.1.0-",
     "@angular/router": "~12.1.0-",
-    "@angular/material-moment-adapter": "^9.2.2",
+    "cdk": "^2.13.0",
+    "font-awesome": "^4.7.0",
     "rxjs": "~6.6.0",
     "tslib": "^2.2.0",
     "zone.js": "~0.11.4"
