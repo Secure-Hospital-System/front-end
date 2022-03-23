@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { StateService } from '../services/state.service';
 
 
 @Component({
@@ -8,10 +9,28 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./user.component.css']
 })
 export class UserComponent implements OnInit {
-  constructor() { }
+  constructor(private stateService: StateService) { }
   public myForm!: FormGroup;
   public patient!: Patient;
+  id = "1";
+
   ngOnInit(): void {
+
+    this.stateService.fetchUserDetails(this.id).subscribe((data: any) => {
+      console.log('User Data:',data);
+    });
+
+    this.stateService.fetchUserDiagnosis(this.id).subscribe((data: any) => {
+      console.log('User Diagnosis:',data);
+    });
+
+    this.stateService.fetchUserPrescription(this.id).subscribe((data: any) => {
+      console.log('User Prescription:',data);
+    });
+
+    this.stateService.fetchUserReport(this.id).subscribe((data: any) => {
+      console.log('User Report:',data);
+    });
 
     //Creating the myForm Data and validating each input field.
     this.myForm = new FormGroup({

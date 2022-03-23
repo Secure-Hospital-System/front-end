@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
+import { StateService } from '../services/state.service';
 
 
 @Component({
@@ -10,6 +11,7 @@ import {FormControl} from '@angular/forms';
 
 export class CreateAppointmentComponent implements OnInit {
 
+  
   // Mock Data
   doctors = [
     { id: '1', name: 'Doctor 1' },
@@ -30,9 +32,15 @@ export class CreateAppointmentComponent implements OnInit {
   selectedDoctor: string = '';
   selectedTime: string = '';
   selectedDate: string = '';
-  constructor() {}
+  constructor(private stateService: StateService) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+
+    this.stateService.fetchListOfAppointments().subscribe((data: any) => {
+      console.log('User Data:',data);
+    });
+
+  }
 
     
   onDoctorSelect(value:any) {
