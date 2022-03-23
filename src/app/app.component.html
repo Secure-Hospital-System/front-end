@@ -1,31 +1,50 @@
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+<!-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <app-toolbar></app-toolbar>
 <div class="default-page-settings">
   <router-outlet></router-outlet>
+</div> -->
+
+
+<div id="app" style="font-size:16px">
+  <nav class="navbar navbar-expand navbar-dark bg-dark">
+    <!-- <a href="#" class="navbar-brand">bezKoder</a> -->
+    <!-- <button mat-icon-button class="example-icon" aria-label="Example icon-button with menu icon" href="/dashboard" routerLink="/dashboard">
+      <mat-icon>local_hospital</mat-icon>
+    </button> -->
+    <ul class="navbar-nav mr-auto" routerLinkActive="active" >
+      <li class="nav-item">
+        <a href="/home" class="nav-link" routerLink="home">Home </a>
+      </li>
+      <li class="nav-item" *ngIf="showAdminBoard">
+        <a href="/admin" class="nav-link" routerLink="admin">Admin Board</a>
+      </li>
+      <li class="nav-item" *ngIf="showModeratorBoard">
+        <a href="/mod" class="nav-link" routerLink="mod">Moderator Board</a>
+      </li>
+      <li class="nav-item">
+        <a href="/user" class="nav-link" *ngIf="isLoggedIn" routerLink="user">User</a>
+      </li>
+    </ul>
+    <span style="color: rgba(255,255,255,.5);">Secure Hospital System</span>
+    <ul class="navbar-nav ml-auto" *ngIf="!isLoggedIn">
+      <li class="nav-item">
+        <a href="/register" class="nav-link" routerLink="register">Sign Up</a>
+      </li>
+      <li class="nav-item">
+        <a href="/login" class="nav-link" routerLink="login">Login</a>
+      </li>
+    </ul>
+    <ul class="navbar-nav ml-auto" *ngIf="isLoggedIn">
+      <li class="nav-item">
+        <a href="/profile" class="nav-link" routerLink="profile">{{ username }}</a>
+      </li>
+      <li class="nav-item">
+        <a href class="nav-link" (click)="logout()">LogOut</a>
+      </li>
+    </ul>
+  </nav>
+  <div style="padding-top: 30px !important;"  >
+    <router-outlet></router-outlet>
+  </div>
+  
 </div>
-
-<!-- <app-dashboard></app-dashboard> -->
-<!-- <app-appointment></app-appointment> -->
-
-<!-- <mat-form-field appearance="fill">
-  <mat-label>Input</mat-label>
-  <input matInput>
-</mat-form-field>
-<mat-form-field appearance="fill">
-  <mat-label>Select</mat-label>
-  <mat-select>
-    <mat-option [value]="one">First option</mat-option>
-    <mat-option [value]="two">Second option</mat-option>
-  </mat-select>
-</mat-form-field>
-<mat-form-field appearance="fill">
-  <mat-label>Textarea</mat-label>
-  <textarea matInput></textarea>
-</mat-form-field>
-
-<mat-form-field appearance="fill">
-  <mat-label>Select</mat-label>
-  <mat-select (selectionChange)="changeClient($event.value)">
-    <mat-option *ngFor="let topping of toppingList" [value]="topping">{{topping}}</mat-option>
-  </mat-select>
-</mat-form-field> -->
