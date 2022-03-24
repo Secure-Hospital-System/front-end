@@ -22,6 +22,11 @@ export class AuthService {
       username: user.username,
       email: user.email,
       password: user.password,
+      // address: user.address,
+      // phoneNumber: user.number,
+      // age: user.age,
+      // gender: user.gender,
+      // creditCard: user.creditCard,
       role:["patient"]
     }, httpOptions);
   }
