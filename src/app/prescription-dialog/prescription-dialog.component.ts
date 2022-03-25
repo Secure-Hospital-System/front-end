@@ -1,3 +1,4 @@
+import { Prescription } from './../table/table.component';
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
@@ -17,6 +18,7 @@ export class PrescriptionDialogComponent implements OnInit {
   data: any;
   val: any;
   type: any;
+  length!: number;
 
   @Output() datachange = new EventEmitter<Object>();
 
@@ -34,11 +36,12 @@ export class PrescriptionDialogComponent implements OnInit {
   }
 
   save(data:any) {
-    this.datachange.emit([data,this.type]);
+    this.datachange.emit([data,this.type,this.length]);
   }
 
   openDialog(val:any,act:any): void {
     this.type = act
+    this.length = val.Nos
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog1, {
       width: '400px',
       height: '400px',
@@ -74,26 +77,15 @@ export class DialogOverviewExampleDialog1 {
 
   public myForm!: FormGroup;
 
-  states: string[] = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado'
-  ];
-
   @Output() datachange = new EventEmitter<Object>();
 
   ngOnInit(): void {
     //Creating the myForm Data and validating each input field.
     this.myForm = new FormGroup({
-      FirstName: new FormControl('', [Validators.required, Validators.maxLength(20),Validators.pattern('^[a-zA-Z \-\']+')]),
-      Diagnosis: new FormControl('', [Validators.required, Validators.maxLength(50)]),
+      Prescription: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       Date: new FormControl('', [Validators.required]),
-      LabTest: new FormControl('', [Validators.required]),
       });
-    this.myForm.setValue({FirstName:this.data.name,Diagnosis:this.data.weight,Date:this.data.position,LabTest:this.data.symbol})
+      this.myForm.setValue({Prescription:this.data.Prescription, Date:this.data.Date})
   }
 
   onNoClick(): void {
@@ -117,8 +109,6 @@ export class DialogOverviewExampleDialog1 {
 }
 
 export interface DialogData {
-  name: string;
-  weight: string;
-  position: string;
-  symbol:string;
+  Prescription: string;
+  Date: string;
 }

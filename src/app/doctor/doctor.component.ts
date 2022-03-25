@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { StateService } from '../services/state.service';
 
 
 @Component({
@@ -8,42 +9,48 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
   styleUrls: ['./doctor.component.css']
 })
 export class DoctorComponent implements OnInit {
-  constructor() { }
+  constructor(private stateService: StateService){ }
   public myForm!: FormGroup;
   public patient!: Patient;
+  id = "1";
+
   ngOnInit(): void {
 
     //Creating the myForm Data and validating each input field.
     this.myForm = new FormGroup({
-      FirstName: new FormControl('', [Validators.required, Validators.maxLength(20),Validators.pattern('^[a-zA-Z \-\']+')]),
-      LastName: new FormControl('', [Validators.required, Validators.maxLength(20),Validators.pattern('^[a-zA-Z \-\']+')]),
-      Address1: new FormControl('', [Validators.required, Validators.maxLength(50)]),
-      Address2: new FormControl('', [Validators.maxLength(50)]),
-      City: new FormControl('', [Validators.required, Validators.maxLength(20),Validators.pattern('^[a-zA-Z \-\']+')]),
-      State: new FormControl('', [Validators.required, Validators.maxLength(20),Validators.pattern('^[a-zA-Z \-\']+')]),
-      Date: new FormControl('', [Validators.required]),
+      Name: new FormControl('', [Validators.required, Validators.maxLength(20),Validators.pattern('^[a-zA-Z \-\']+')]),
+      Address: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       Age: new FormControl('', [Validators.required, Validators.pattern("^[0-9]*$")]),
-      BloodGroup: new FormControl('', [Validators.required,Validators.maxLength(3), Validators.pattern('^[a-zA-Z+\\- \-\']+')]),
-      PostalCode: new FormControl('', [Validators.required, Validators.pattern("^[0-9]*$")]),
+      CreditCard: new FormControl('', [Validators.required, Validators.maxLength(16) ,Validators.pattern("^[0-9]*$")]),
+      PhoneNumber: new FormControl('', [Validators.required, Validators.maxLength(10) ,Validators.pattern("^[0-9]*$")]),
       Gender: new FormControl('',[Validators.required])
 
       });
 
-    //Setting the initial value for the Patient's form
-    this.myForm.setValue(this.patient = {
-      FirstName: "Sachin",
-      LastName: "Tendulkar",
-      PostalCode: "12345",
-      BloodGroup: "A",
-      City: true,
-      Age: "2",
-      Address1:  "400050",
-      Address2:"sdfljalksdfj",
-      Date:new Date("Tue Feb 08 2022 00:00:00 GMT-0700 (Mountain Standard Time)"),
-      State:"sfasdf",
-      Gender:"Female"
+    this.stateService.fetchUserDetails(this.id).subscribe((data: any) => {
+      this.myForm.setValue(this.patient = {
+        Name: data.name,
+        PhoneNumber: data.phoneNumber,
+        Age: data.age,
+        Address: data.address,
+        CreditCard: data.creditCard,
+        Gender: data.gender
 
-    })
+      })
+    });
+
+    this.stateService.fetchUserDiagnosis(this.id).subscribe((data: any) => {
+      console.log('User Diagnosis:',data);
+    });
+
+    this.stateService.fetchUserPrescription(this.id).subscribe((data: any) => {
+      console.log('User Prescription:',data);
+    });
+
+    this.stateService.fetchUserReport(this.id).subscribe((data: any) => {
+      console.log('User Report:',data);
+    });
+
 
     //Disabling the form
     this.myForm.disable()
@@ -69,15 +76,10 @@ export class DoctorComponent implements OnInit {
 
 //Patient data class interface
 export interface Patient {
-  FirstName: string;
-  LastName: string;
-  PostalCode: string;
-  BloodGroup: string;
-  City: boolean;
+  Name: string;
+  PhoneNumber: string;
   Age: string;
-  Address1: string;
-  Address2: string;
-  Date: Date;
-  State: string;
+  Address: string;
+  CreditCard: string;
   Gender:string;
   }

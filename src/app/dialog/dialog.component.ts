@@ -18,6 +18,7 @@ export class DialogComponent implements OnInit {
   data: any;
   val: any;
   type: any;
+  length!: number;
 
   @Output() datachange = new EventEmitter<Object>();
 
@@ -37,11 +38,13 @@ export class DialogComponent implements OnInit {
   }
 
   save(data:any) {
-    this.datachange.emit([data,this.type]);
+    this.datachange.emit([data,this.type,this.length]);
   }
 
   openDialog(val:any,act:any): void {
+    console.log(val)
     this.type = act
+    this.length = val.Nos
     const dialogRef = this.dialog.open(DialogOverviewExampleDialog, {
       width: '400px',
       height: '400px',
@@ -77,25 +80,15 @@ export class DialogOverviewExampleDialog {
 
   public myForm!: FormGroup;
 
-  states: string[] = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado'
-  ];
-
   @Output() datachange = new EventEmitter<Object>();
 
   ngOnInit(): void {
     //Creating the myForm Data and validating each input field.
     this.myForm = new FormGroup({
-      FirstName: new FormControl('', [Validators.required, Validators.maxLength(20),Validators.pattern('^[a-zA-Z \-\']+')]),
       Diagnosis: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       Date: new FormControl('', [Validators.required]),
       });
-    this.myForm.setValue({FirstName:this.data.name,Diagnosis:this.data.weight,Date:this.data.position})
+    this.myForm.setValue({Diagnosis:this.data.Diagnosis, Date:this.data.Date})
   }
 
   onNoClick(): void {
@@ -119,8 +112,7 @@ export class DialogOverviewExampleDialog {
 }
 
 export interface DialogData {
-  name: string;
-  weight: string;
-  position: string;
+  Diagnosis: string;
+  Date: string;
 }
 
