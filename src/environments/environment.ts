@@ -9,9 +9,9 @@ export const environment = {
     projectId: "<your_dialogflow_project_id_here>"
   },
   backend: {
-    baseUrl: "http://localhost:3000/",
-    apiUrl: "http://localhost:3000/api/",
-    requestTextUrl: "http://localhost:3000/api/requestText/"
+    baseUrl: "http://localhost:4000/",
+    apiUrl: "http://localhost:4000/api/",
+    requestTextUrl: "http://localhost:4000/api/requestText/"
   }
 };
 

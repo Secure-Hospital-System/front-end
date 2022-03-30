@@ -1,18 +1,18 @@
 <div class="col-md-12">
   <div class="card card-container" style="align-items: center">
-    <h4>Registration</h4>
+    <h4 *ngIf="!isSuccessful">Registration</h4>
     <!-- <img
       id="profile-img"
       src="../../assets//images/doctorandkid.svg"
       class="profile-img-card"
       style="width: 30%; margin: 10px"
     /> -->
-    <img alt="" class="hCL kVc L4E MIw" importance="auto" loading="auto" src="https://i.pinimg.com/originals/20/eb/34/20eb34def30aa97fa5146c48ff13b959.gif">
+    <img *ngIf="!isSuccessful" alt="" class="hCL kVc L4E MIw" importance="auto" loading="auto" src="https://i.pinimg.com/originals/20/eb/34/20eb34def30aa97fa5146c48ff13b959.gif">
     <!-- <img alt="" class="hCL kVc L4E MIw" importance="auto" loading="auto" src="https://i.pinimg.com/originals/82/b6/48/82b64893248a3a018403e9157dbc7cee.gif"> -->
     <form
       *ngIf="!isSuccessful"
       name="form"
-      (ngSubmit)="f.form.valid && onSubmit()"
+      (ngSubmit)="onSubmit()"
       #f="ngForm"
       novalidate
       style="width: 40%"
@@ -94,7 +94,7 @@
           maxlength="20"
           #address="ngModel"
         />
-        <div class="alert-danger" *ngIf="f.submitted && address.invalid">
+        <div class="alert-danger" *ngIf="f.submitted">
           <div *ngIf="address.errors && address.errors.required">
             Address is required
           </div>
@@ -113,7 +113,7 @@
           maxlength="20"
           #number="ngModel"
         />
-        <div class="alert-danger" *ngIf="f.submitted && number.invalid">
+        <div class="alert-danger" *ngIf="f.submitted">
           <div *ngIf="number.errors && number.errors.required">
             Number is required
           </div>
@@ -132,7 +132,7 @@
           maxlength="20"
           #age="ngModel"
         />
-        <div class="alert-danger" *ngIf="f.submitted && age.invalid">
+        <div class="alert-danger" *ngIf="f.submitted">
           <div *ngIf="age.errors && age.errors.required">
             Age is required
           </div>
@@ -151,7 +151,7 @@
           maxlength="20"
           #gender="ngModel"
         />
-        <div class="alert-danger" *ngIf="f.submitted && gender.invalid">
+        <div class="alert-danger" *ngIf="f.submitted">
           <div *ngIf="gender.errors && gender.errors.required">
             Gender is required
           </div>
@@ -171,7 +171,7 @@
           maxlength="20"
           #cardNumber="ngModel"
         />
-        <div class="alert-danger" *ngIf="f.submitted && cardNumber.invalid">
+        <div class="alert-danger" *ngIf="f.submitted">
           <div *ngIf="cardNumber.errors && cardNumber.errors.required">
             Card Number is required
           </div>
@@ -185,8 +185,13 @@
         Signup failed!<br />{{ errorMessage }}
       </div>
     </form>
-    <div class="alert alert-success" *ngIf="isSuccessful">
-      Your registration is successful!
+    <div *ngIf="isSuccessful && !isRegistrationSucess">
+        <app-auth2f-registration [email]="form.email" (authStatusEvent)='auth2fVerify($event)'></app-auth2f-registration>
+    </div>
+    <div class="alert alert-success" *ngIf="isRegistrationSucess">
+        Your registration is successful! You may now login.
     </div>
   </div>
 </div>
+
+

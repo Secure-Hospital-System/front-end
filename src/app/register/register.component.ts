@@ -9,6 +9,7 @@ export class RegisterComponent implements OnInit {
   form: any = {};
   isSuccessful = false;
   isSignUpFailed = false;
+  isRegistrationSucess = false;
   errorMessage = '';
   constructor(private authService: AuthService) { }
   ngOnInit(): void {
@@ -26,4 +27,9 @@ export class RegisterComponent implements OnInit {
       }
     );
   }
+
+  auth2fVerify(status:any) {
+    this.isRegistrationSucess = status;
+    console.log('authVerify:',status);
+}
 }

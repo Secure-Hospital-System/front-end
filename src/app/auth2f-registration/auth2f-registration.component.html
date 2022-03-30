@@ -1,0 +1,60 @@
+<div class="col-md-12">
+  <div class="card card-container" style="align-items: center">
+    <h4>Registration of 2 Factor Auth</h4>
+    <div *ngIf="qrCode">
+      <img
+        width="100%"
+        alt=""
+        class="hCL kVc L4E MIw"
+        importance="auto"
+        loading="auto"
+        src={{qrCode}}
+       />
+      <!-- src="data:image/png;base64,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" -->
+ 
+      <form
+        *ngIf="!isLoggedIn"
+        name="form"
+        (ngSubmit)="f.form.valid && onSubmit()"
+        #f="ngForm"
+        novalidate
+        style="width: 40%"
+      >
+        <div class="form-group">
+          <label for="otp">OTP</label>
+          <input
+            type="text"
+            class="form-control"
+            name="otp"
+            [(ngModel)]="form.otp"
+            required
+            #otp="ngModel"
+          />
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="f.submitted && otp.invalid"
+          >
+            Otp is required!
+          </div>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary btn-block">Submit</button>
+        </div>
+        <!-- <div class="form-group">
+          <div
+            class="alert alert-danger"
+            role="alert"
+            *ngIf="f.submitted && isLoginFailed"
+          >
+            Login failed: {{ errorMessage }}
+          </div>
+        </div> -->
+      </form>
+    </div>
+
+    <!-- <div class="alert alert-success" *ngIf="isLoggedIn">
+        Logged in as {{ roles }}.
+      </div> -->
+  </div>
+</div>

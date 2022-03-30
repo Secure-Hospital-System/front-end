@@ -1,38 +1,47 @@
 import { Component, OnInit } from '@angular/core';
-
-export interface appointmentData {
-  date: string;
-  position: number;
-  time: string;
-  doctor: string;
-}
-
-const ELEMENT_DATA: appointmentData[] = [
-  {position: 1, date: '1/2/22', time: '1:00 pm', doctor: 'Doctor 1'},
-  {position: 2, date: '2/2/22', time: '2:00 pm', doctor: 'Doctor 2'},
-  {position: 3, date: '3/2/22', time: '3:00 pm', doctor: 'Doctor 3'},
-];
+import { StateService } from '../services/state.service';
 
 
 @Component({
   selector: 'app-view-appointment',
   templateUrl: './view-appointment.component.html',
-  styleUrls: ['./view-appointment.component.css']
+  styleUrls: ['./view-appointment.component.css'],
 })
 export class ViewAppointmentComponent implements OnInit {
+  displayedColumns: string[] = ['date', 'time', 'doctor', 'status','action'];
+  // dataSource = ELEMENT_DATA;
+  appointmentData:any ;
 
-    
-  displayedColumns: string[] = ['position', 'date', 'time', 'doctor','action'];
-  dataSource = ELEMENT_DATA;
-
-  constructor() { }
+  constructor(private stateService: StateService) {}
 
   ngOnInit(): void {
+    this.refresh();
   }
 
-  deleteRow(val:any){
-    this.dataSource = this.dataSource.filter(obj => obj.position !== val.position);
-    console.log(this.dataSource);
+  refresh(){
+    this.appointmentData = null;
+    this.stateService.viewPatientAppointment().subscribe(
+      (response) => {
+        this.appointmentData = response;
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
   }
 
+  deleteRow(val: any) {
+    this.stateService.cancelPatientAppointment(val.doctorID,val.date,val.time).subscribe(
+      (response) => {
+           this.appointmentData = this.appointmentData.filter((obj:any) => (((obj.doctorID !== val.doctorID) || (obj.date !== val.date) || (obj.time !== val.time)))
+    );
+        console.log(response);
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+    console.log(val);
+  }
 }

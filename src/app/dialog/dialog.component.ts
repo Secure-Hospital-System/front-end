@@ -12,7 +12,12 @@ import { Output, EventEmitter } from '@angular/core';
 
 export class DialogComponent implements OnInit {
 
-
+  foods = [
+    {value: 'steak-0', viewValue: 'Steak'},
+    {value: 'pizza-1', viewValue: 'Pizza'},
+    {value: 'tacos-2', viewValue: 'Tacos'},
+  ];
+  
   @Input()
   btnname: string="Create";
   data: any;
@@ -25,7 +30,7 @@ export class DialogComponent implements OnInit {
   constructor(public dialog: MatDialog) {}
 
   ngOnInit(): void {
-    if (this.btnname=="Create"){
+    if (this.btnname=="add_circle"){
       this.val="accent"
     }
     else{

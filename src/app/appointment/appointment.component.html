@@ -1,7 +1,7 @@
 
   <h4>Appointments</h4>
 
-  <mat-tab-group>
+  <mat-tab-group (selectedTabChange)="onTabChanged($event)">
     <mat-tab label="Create Appointment">
         <app-create-appointment></app-create-appointment>
     </mat-tab>

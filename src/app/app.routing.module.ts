@@ -57,10 +57,10 @@ const routes: Routes = [
     path: 'chat',
     component: ChatbotComponent,
   },
-  // {
-  //   path: '**',
-  //   component: DashboardComponent,
-  // },
+  {
+    path: 'records',
+    component: UserComponent,
+  },
 
   { path: 'home', component: HomeComponent },
   { path: 'login', component: LoginComponent },

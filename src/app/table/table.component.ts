@@ -1,10 +1,17 @@
-import { isDataSource } from '@angular/cdk/collections';
-import {AfterViewInit, Component, Input, ViewChild, ɵɵtrustConstantResourceUrl} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  Input,
+  OnChanges,
+  ViewChild,
+  ɵɵtrustConstantResourceUrl,
+} from '@angular/core';
 import { StateService } from '../services/state.service';
 
-import {MatTableDataSource} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from '../dialog/dialog.component';
 import { PrescriptionDialogComponent } from '../prescription-dialog/prescription-dialog.component';
+import { TokenStorageService } from '../services/token-storage.service';
 
 //Table Component
 @Component({
@@ -12,143 +19,274 @@ import { PrescriptionDialogComponent } from '../prescription-dialog/prescription
   templateUrl: './table.component.html',
   styleUrls: ['./table.component.css'],
 })
+export class TableComponent implements OnChanges {
+  constructor(
+    private stateService: StateService,
+    private tokenStorageService: TokenStorageService
+  ) {}
+  // @Input() user: string = 'patient';
+  @Input() id: string = '1';
 
-export class TableComponent implements AfterViewInit {
-  constructor(private stateService: StateService) {}
-  id = "1";
-  @Input()
-  user!: string;
-  diagnosisdata!: Object;
-  prescriptiondata!: Object;
   show: boolean = false;
 
   //Column to be displayed for the table.
-  displayedColumns!: string[]
-  displayedColumnsprescription!: string[]
+  displayedColumns!: string[];
+  displayedColumnsprescription!: string[];
+  displayedColumnsRecord!: string[];
   //Adding the table data to datasource
-  dataSource = new MatTableDataSource(ELEMENT_DATA);
+  diagnosisSource = new MatTableDataSource(ELEMENT_DATA);
   prescriptionSource = new MatTableDataSource(Prescription_Data);
+  recordSource = new MatTableDataSource(Record_Data);
 
   @ViewChild(DialogComponent) dialog!: DialogComponent;
   @ViewChild(PrescriptionDialogComponent) dialog1!: PrescriptionDialogComponent;
 
-  //Assigning the paginatior for limiting the no. of rows.
-  ngOnInit(){
-    //Column to be displayed for the table.
-    this.displayedColumns = (this.user=='patient'? ["Nos",'Date', 'Diagnosis', 'DoctorId', 'PatientId']:["Nos",'Date', 'Diagnosis', 'DoctorId', 'PatientId','action']);
-    this.displayedColumnsprescription = (this.user=='patient'? ["Nos",'Date', 'Prescription', 'DoctorId', 'PatientId']:["Nos",'Date', 'Prescription', 'DoctorId', 'PatientId','action']);
+  ngOnChanges() {
+    if (this.id) {
+      this.fetchData();
+    }
+  }
 
-    this.show = this.user ==="doctor";
+  resetValues() {
+    this.diagnosisSource = new MatTableDataSource(ELEMENT_DATA);
+    this.diagnosisSource.data = [];
+    this.prescriptionSource = new MatTableDataSource(Prescription_Data);
+    this.prescriptionSource.data = [];
+    this.recordSource = new MatTableDataSource(Record_Data);
+    this.recordSource.data = [];
+  }
+
+  fetchData() {
+    this.resetValues();
+    this.displayedColumns = this.tokenStorageService
+      .getUser()
+      .roles.includes('ROLE_PATIENT')
+      ? ['Nos', 'Date', 'Diagnosis', 'DoctorId', 'PatientId']
+      : ['Nos', 'Date', 'Diagnosis', 'DoctorId', 'PatientId', 'action'];
+    this.displayedColumnsprescription = this.tokenStorageService
+      .getUser()
+      .roles.includes('ROLE_PATIENT')
+      ? ['Nos', 'Date', 'Prescription', 'DoctorId', 'PatientId']
+      : ['Nos', 'Date', 'Prescription', 'DoctorId', 'PatientId'];
+    this.displayedColumnsRecord = this.tokenStorageService
+      .getUser()
+      .roles.includes('ROLE_PATIENT')
+      ? ['Nos', 'Date', 'Record', 'DoctorId', 'PatientId']
+      : ['Nos', 'Date', 'Record', 'DoctorId', 'PatientId', 'action'];
+
+    this.show = this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR');
     this.stateService.fetchUserDiagnosis(this.id).subscribe((data: any) => {
-      var initialData = this.dataSource.data
-      var i = initialData.length;
-      var add = {
-        "Nos": i+1,
-        "Date": data.date,
-        "Diagnosis": data.diagnosis,
-        "DoctorId": data.doctorID,
-        "PatientId": data.patientID
+      var initialData = this.diagnosisSource.data;
+      // var i = initialData.length;
+      for (let i = 0; i < data.length; i++) {
+        var addDiagnosis = {
+          Nos: i + 1,
+          Date: data[i].date,
+          Diagnosis: data[i].diagnosis,
+          DoctorId: data[i].doctorID,
+          PatientId: data[i].patientID,
+        };
+        initialData.push(addDiagnosis);
       }
-      initialData.push(add);
-
-      this.dataSource.data = initialData;
+      this.diagnosisSource.data = initialData;
     });
 
     this.stateService.fetchUserPrescription(this.id).subscribe((data: any) => {
       var initialData = this.prescriptionSource.data;
-      var i = initialData.length;
-      var add = {
-        "Nos": i+1,
-        "Date": data.date,
-        "Prescription": data.prescription,
-        "DoctorId": data.doctorID,
-        "PatientId": data.patientID
+      // var i = initialData.length;
+      for (let i = 0; i < data.length; i++) {
+        var addData = {
+          Nos: i + 1,
+          Date: data[i].date,
+          Prescription: data[i].prescription,
+          DoctorId: data[i].doctorID,
+          PatientId: data[i].patientID,
+        };
+        initialData.push(addData);
       }
-      initialData.push(add);
-
       this.prescriptionSource.data = initialData;
     });
+
+    this.stateService.viewPatientRecord(this.id).subscribe((data: any) => {
+      var initialData = this.recordSource.data;
+      for (let i = 0; i < data.length; i++) {
+        var addData = {
+          Nos: i + 1,
+          Date: data[i].date,
+          Record: data[i].record,
+          DoctorId: data[i].inputter,
+          PatientId: data[i].patientID,
+        };
+        initialData.push(addData);
+      }
+
+
+      this.recordSource.data = initialData;
+    });
   }
-  ngAfterViewInit() {
+  edit(data: any) {
+    this.dialog.openDialog(data, 'edit');
   }
 
-  edit(data:any){
-    this.dialog.openDialog(data,"edit",)
+  createDiagnosis() {
+    var data = { Date: '', Diagnosis: '' };
+    this.dialog.openDialog(data, 'createDiagnosis');
   }
 
-  create(){
-    var data ={Date:"",Diagnosis:""}
-    this.dialog.openDialog(data,"create")
+  edit1(data: any) {
+    this.dialog1.openDialog(data, 'edit');
   }
 
-  edit1(data:any){
-    this.dialog1.openDialog(data,"edit")
-
+  create1() {
+    var data = { Date: '', Prescription: '' };
+    this.dialog1.openDialog(data, 'createDiagnosis');
   }
 
-  create1(){
-    var data ={Date:"",Prescription:""}
-    this.dialog1.openDialog(data,"create")
-  }
-
-  add(data:any){
-    var value = this.dataSource.data
-    var l = value.length
-    if (data[1]=="edit"){
-      value[data[2]-1].Date=data[0].Date
-      value[data[2]-1].Diagnosis=data[0].Diagnosis
-      this.dataSource.data = value
+  addDiagnosis(data: any) {
+    var value = this.diagnosisSource.data;
+    var l = value.length;
+    if (data[1] == 'edit') {
+      this.stateService
+        .updatePatientDiagnosis(
+          value[l - 1].PatientId,
+          value[l - 1].DoctorId,
+          value[l - 1].Date,
+          data[0].Date,
+          data[0].Diagnosis
+        )
+        .subscribe(
+          (res) => {
+            value[data[2] - 1].Date = data[0].Date;
+            value[data[2] - 1].Diagnosis = data[0].Diagnosis;
+            this.diagnosisSource.data = value;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    } else {
+      this.stateService
+        .createPatientDiagnosis(
+          value[l - 1].PatientId,
+          value[l - 1].DoctorId,
+          data[0].Date,
+          data[0].Diagnosis
+        )
+        .subscribe(
+          (res) => {
+            value.push({
+              Nos: l + 1,
+              Date: data[0].Date,
+              Diagnosis: data[0].Diagnosis,
+              PatientId: value[l - 1].PatientId,
+              DoctorId: value[l - 1].DoctorId,
+            });
+            this.diagnosisSource.data = value;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     }
-    else{
+  }
+
+  addPrescription(data: any) {
+    // console.log(data);
+    var value = this.prescriptionSource.data;
+    var l = value.length;
+    if (data[1] == 'edit') {
+      value[data[2] - 1].Date = data[0].Date;
+      value[data[2] - 1].Prescription = data[0].Prescription;
+      this.prescriptionSource.data = value;
+    } else {
+      this.stateService
+        .createPatientPrescription(
+          value[l - 1].PatientId,
+          value[l - 1].DoctorId,
+          data[0].Date,
+          data[0].Prescription
+        )
+        .subscribe(
+          (res) => {
+            value.push({
+              Nos: l + 1,
+              Date: data[0].Date,
+              Prescription: data[0].Prescription,
+              PatientId: value[l - 1].PatientId,
+              DoctorId: value[l - 1].DoctorId,
+            });
+            this.prescriptionSource.data = value;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    }
+  }
+
+  addRecord(data: any) {
+    console.log(data);
+    var value = this.recordSource.data;
+    var l = value.length;
+    if (data[1] == 'edit') {
+      value[data[2] - 1].Date = data[0].Date;
+      value[data[2] - 1].Record = data[0].Record;
+      this.recordSource.data = value;
+    } else {
       value.push({
-        "Nos": l+1,
-        "Date": data[0].Date,
-        "Diagnosis": data[0].Diagnosis,
-        "PatientId":value[l-1].PatientId,
-        "DoctorId":value[l-1].DoctorId
-      })
-      this.dataSource.data = value
+        Nos: l + 1,
+        Date: data[0].Date,
+        Record: data[0].Record,
+        PatientId: value[l - 1].PatientId,
+        DoctorId: value[l - 1].DoctorId,
+      });
+      this.recordSource.data = value;
     }
   }
 
-  add1(data:any){
-    console.log(data)
-    var value = this.prescriptionSource.data
-    var l = value.length
-    if (data[1]=="edit"){
-      value[data[2]-1].Date=data[0].Date
-      value[data[2]-1].Prescription=data[0].Prescription
-      this.prescriptionSource.data = value
-    }
-    else{
-      value.push({
-        "Nos": l+1,
-        "Date": data[0].Date,
-        "Prescription": data[0].Prescription,
-        "PatientId":value[l-1].PatientId,
-        "DoctorId":value[l-1].DoctorId
-      })
-      this.prescriptionSource.data = value
-    }
+  deleteDiagnosis(data: any) {
+    // console.log('Delete Diagnosis:', data);
+    this.stateService
+      .deletePatientDiagnosis(
+        data.PatientId,
+        data.DoctorId,
+        data.Date,
+        data.Diagnosis
+      )
+      .subscribe(
+        (res) => {
+          var value = this.diagnosisSource.data.filter(function (item) {
+            return item !== data;
+          });
+          for (var i = 0; i < value.length; i += 1) {
+            value[i].Nos = i + 1;
+          }
+          this.diagnosisSource.data = value;
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 
-  delete(data:any){
-    var value = this.dataSource.data.filter(function(item) {
-      return item !== data
-    })
-    for(var i=0;i<value.length;i+=1){
-      value[i].Nos = i+1
+  delete1(data: any) {
+    var value = this.prescriptionSource.data.filter(function (item) {
+      return item !== data;
+    });
+    for (var i = 0; i < value.length; i += 1) {
+      value[i].Nos = i + 1;
     }
-    this.dataSource.data = value
+    this.prescriptionSource.data = value;
   }
-  delete1(data:any){
-    var value = this.prescriptionSource.data.filter(function(item) {
-      return item !== data
-    })
-    for(var i=0;i<value.length;i+=1){
-      value[i].Nos = i+1
-    }
-    this.prescriptionSource.data = value
+
+  deleteRecord(data: any) {
+    // var value = this.recordSource.data.filter(function (item) {
+    //   return item !== data;
+    // });
+    // for (var i = 0; i < value.length; i += 1) {
+    //   value[i].Nos = i + 1;
+    // }
+    // this.recordSource.data = value;
   }
 }
 
@@ -169,8 +307,17 @@ export interface Prescription {
   PatientId: string;
 }
 
+export interface Record {
+  Nos: Number;
+  Date: string;
+  Record: string;
+  DoctorId: string;
+  PatientId: string;
+}
+
 //Creating dummy data for inserting in the tables.
 const ELEMENT_DATA: Diagnosis[] = [];
 
 const Prescription_Data: Prescription[] = [];
 
+const Record_Data: Record[] = [];

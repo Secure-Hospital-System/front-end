@@ -23,7 +23,7 @@ export class PrescriptionDialogComponent implements OnInit {
   @Output() datachange = new EventEmitter<Object>();
 
   ngOnInit(): void {
-    if (this.btnname=="Create"){
+    if (this.btnname=="add_circle"){
       this.val="accent"
     }
     else{

@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { StateService } from '../services/state.service';
-
+import { TokenStorageService } from '../services/token-storage.service';
 
 @Component({
   selector: 'app-doctor',
@@ -9,13 +9,13 @@ import { StateService } from '../services/state.service';
   styleUrls: ['./doctor.component.css']
 })
 export class DoctorComponent implements OnInit {
-  constructor(private stateService: StateService){ }
+  constructor(private stateService: StateService,private tokenStorageService:TokenStorageService){ }
   public myForm!: FormGroup;
   public patient!: Patient;
   id = "1";
 
   ngOnInit(): void {
-
+    this.id = this.tokenStorageService.getUserID();
     //Creating the myForm Data and validating each input field.
     this.myForm = new FormGroup({
       Name: new FormControl('', [Validators.required, Validators.maxLength(20),Validators.pattern('^[a-zA-Z \-\']+')]),

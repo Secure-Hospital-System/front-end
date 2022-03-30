@@ -5,6 +5,7 @@ const USER_KEY = 'auth-user';
   providedIn: 'root'
 })
 export class TokenStorageService {
+  patientID = 46;
 
   constructor() { }
   signOut(): void {
@@ -25,5 +26,24 @@ export class TokenStorageService {
     const userKey = sessionStorage.getItem(USER_KEY);
     if (userKey)  return JSON.parse(userKey);
     else return "Error"
+  }
+
+  public getUserID(){
+    return 46;
+    if(this.getUser() == "Error"){
+      return "46";
+    }
+    return this.getUser().id;
+  }
+
+  public setPatientID(id:any){
+    this.patientID = id;
+  }
+
+  public getPatientID(){
+    if(this.getUser().roles.includes('ROLE_PATIENT')){
+      return this.getUser().id;
+    }
+    return this.patientID;
   }
 }

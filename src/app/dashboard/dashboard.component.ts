@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { TokenStorageService } from '../services/token-storage.service';
 
 @Component({
   selector: 'app-dashboard',
@@ -7,6 +7,7 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
+  displayDashboard :any ;
   patientDashBoard = [
     {
       title: 'Appointments',
@@ -16,7 +17,7 @@ export class DashboardComponent implements OnInit {
     {
       title: 'Records',
       icon: 'description',
-      redirectUrl: '',
+      redirectUrl: '/records',
     },
     {
       title: 'User Profile',
@@ -56,10 +57,40 @@ export class DashboardComponent implements OnInit {
   ];
 
 
-  constructor() {}
+  doctorDashBoard = [
+    {
+      title: 'Records',
+      icon: 'description',
+      redirectUrl: '/records',
+    },
+    {
+      title: 'User Profile',
+      icon: 'person',
+      redirectUrl: '/patients',
+    },
+    {
+      title: 'Reports',
+      icon: 'description',
+      redirectUrl: '/reports',
+    },
+    {
+      title: 'Diagnosis',
+      icon: 'storage',
+      redirectUrl: '/diagnosis',
+    },
+    {
+      title: 'Prescription',
+      icon: 'description',
+      redirectUrl: '/prescription',
+    }
+  ];
+
+  constructor(private tokenStorageService: TokenStorageService) {}
 
   ngOnInit(): void {
-
+    if(this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR')){
+      this.displayDashboard = this.doctorDashBoard;
+    }
   }
 
   navigate(){

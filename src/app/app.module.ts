@@ -44,6 +44,8 @@ import { ProfileComponent } from './profile/profile.component';
 import { BoardAdminComponent } from './board-admin/board-admin.component';
 import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
 import { BoardUserComponent } from './board-user/board-user.component';
+import { Auth2fComponent } from './auth2f/auth2f.component';
+import { Auth2fRegistrationComponent } from './auth2f-registration/auth2f-registration.component';
 
 @NgModule({
   declarations: [
@@ -75,7 +77,9 @@ import { BoardUserComponent } from './board-user/board-user.component';
     ProfileComponent,
     BoardAdminComponent,
     BoardModeratorComponent,
-    BoardUserComponent
+    BoardUserComponent,
+    Auth2fComponent,
+    Auth2fRegistrationComponent
   ],
   imports: [
     BrowserModule,

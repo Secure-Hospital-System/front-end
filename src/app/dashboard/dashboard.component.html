@@ -1,5 +1,5 @@
 <div fxLayout="row" fxLayoutAlign="space-evenly center" class="mat-card-action">
-  <div *ngFor="let action of patientDashBoard">
+  <div *ngFor="let action of displayDashboard">
     <div
       class="action-card"
       routerLink="{{ action.redirectUrl }}"

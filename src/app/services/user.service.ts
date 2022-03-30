@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-const API_URL = 'http://ec2-18-212-160-4.compute-1.amazonaws.com:8080/api/test/';
+const API_URL = 'http://ec2-54-235-234-187.compute-1.amazonaws.com:8080/api/test/';
 @Injectable({
   providedIn: 'root'
 })

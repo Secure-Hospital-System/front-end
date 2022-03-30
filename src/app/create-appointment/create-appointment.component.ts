@@ -1,65 +1,141 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl} from '@angular/forms';
+import { FormControl } from '@angular/forms';
+import { catchError, map } from 'rxjs/operators';
 import { StateService } from '../services/state.service';
-
 
 @Component({
   selector: 'app-create-appointment',
   templateUrl: './create-appointment.component.html',
   styleUrls: ['./create-appointment.component.css'],
 })
-
 export class CreateAppointmentComponent implements OnInit {
+  appointmentData: any;
+  availableAppointment: any;
+  availableTime: any;
+  doctors: any;
+  appointmentBooked = false;
+  errorBooking = false;
 
-  
-  // Mock Data
-  doctors = [
-    { id: '1', name: 'Doctor 1' },
-    { id: '2', name: 'Doctor 2' },
-    { id: '3', name: 'Doctor 3' },
-    { id: '4', name: 'General Appointment' },
-  ];
-  
-  appointmentTimes = [
-    { id: '1', time: ' 09:00 am - 10:00 am' },
-    { id: '2', time: ' 10:00 am - 11:00 am' },
-    { id: '3', time: ' 11:00 am - 12:00 pm' },
-  ];
-
-  date = new FormControl(new Date());
-  serializedDate = new FormControl(new Date().toISOString());
-
-  selectedDoctor: string = '';
+  selectedDoctorID: string = '';
+  selectedDoctorName: string = '';
   selectedTime: string = '';
   selectedDate: string = '';
   constructor(private stateService: StateService) {}
 
   ngOnInit(): void {
-
-    this.stateService.fetchListOfAppointments().subscribe((data: any) => {
-      console.log('User Data:',data);
-    });
-
+    this.refresh();
   }
 
-    
-  onDoctorSelect(value:any) {
-    this.selectedDoctor = value;
-    // console.log(value);
+  onDoctorSelect(value: any) {
+    this.selectedDoctorID = value.doctorID;
+    this.selectedDoctorName = value.name;
+    this.availableTime = null;
+    this.selectedDate = '';
+    this.selectedTime = '';
+    this.availableAppointment = this.appointmentData.filter(
+      (val: any) => val.name == this.selectedDoctorName
+    );
+    this.availableAppointment = this.availableAppointment.reduce(
+      (unique: any, o: any) => {
+        if (!unique.some((obj: any) => obj.date === o.date)) {
+          unique.push(o);
+        }
+        return unique;
+      },
+      []
+    );
+    console.log(this.availableAppointment);
   }
 
-  onDateSelect(event:any) {
-    this.selectedDate = event.value;   
- }
+  onDateSelect(event: any) {
+    this.selectedDate = event.value;
+  }
 
- checkAvailability(){
-   
- }
+  checkAvailability() {
+    this.availableAppointment = this.appointmentData.filter(
+      (val: any) => val.name == this.selectedDoctorName
+    );
+    this.availableAppointment = this.availableAppointment.reduce(
+      (unique: any, o: any) => {
+        if (!unique.some((obj: any) => obj.date === o.date)) {
+          unique.push(o);
+        }
+        return unique;
+      },
+      []
+    );
+    console.log(this.availableAppointment);
+  }
 
-  onSubmit(){
-    console.log(this.selectedDoctor);
+  dateSelected(source: any) {
+    console.log(source.value);
+    this.availableTime = this.appointmentData.filter(
+      (val: any) =>
+        val.name == this.selectedDoctorName && val.date == source.value
+    );
+    this.availableTime = this.availableTime.map((val: any) => val.time);
+    console.log(this.availableTime);
+  }
+
+  onSubmit() {
+    console.log(this.selectedDoctorName);
+    console.log(this.selectedDoctorID);
     console.log(this.selectedTime);
     console.log(this.selectedDate);
+    this.stateService
+      .bookAppointment(
+        this.selectedDoctorID,
+        this.selectedDate,
+        this.selectedTime
+      )
+      .subscribe(
+        response => {
+          if(response == true){
+            this.appointmentBooked = true;
+            this.errorBooking = false;
+          }else {
+            this.errorBooking = true;
+          }
+          console.log(response);
+      },
+      error => {
+        this.errorBooking = true;
+          console.log(error);
+      }
+      );
   }
 
+  refresh(){
+    this.availableTime = null;
+    this.selectedDate = '';
+    this.selectedTime = '';
+    this.appointmentBooked = false;
+    this.selectedDoctorID = '';
+    this.selectedDoctorName = '';
+    this.appointmentData = null;
+    this.availableAppointment = null;
+    this.availableTime = null;
+    this.doctors = null;
+    this.errorBooking = false;
+    this.stateService.fetchListOfAppointments().subscribe((data: any) => {
+      console.log('List of Appointments', data);
+      this.appointmentData = data;
+      var result = data.map((val: any) => ({
+        doctorID: val.doctorID,
+        name: val.name,
+      }));
+      result = result.reduce((unique: any, o: any) => {
+        if (
+          !unique.some(
+            (obj: any) => obj.doctorID === o.doctorID && obj.name === o.name
+          )
+        ) {
+          unique.push(o);
+        }
+        return unique;
+      }, []);
+      this.doctors = result;
+      console.log('Doctor of Appointments', this.doctors);
+    });
+  }
 }
