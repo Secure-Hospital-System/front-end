@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
 import { CreateAppointmentComponent } from '../create-appointment/create-appointment.component';
 import { ViewAppointmentComponent } from '../view-appointment/view-appointment.component';
-
+import { TokenStorageService } from '../services/token-storage.service';
 
 
 @Component({
@@ -14,10 +14,14 @@ export class AppointmentComponent implements OnInit {
 
   @ViewChild(CreateAppointmentComponent) private createAppointmentComponent:any;
   @ViewChild(ViewAppointmentComponent) private viewAppointmentComponent:any;
+  isHospitalStaff=false;
+  constructor(private tokenStorageService:TokenStorageService) {}
 
-  constructor() {}
-
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    if(this.tokenStorageService.getUser().roles.includes('ROLE_HOSPITALSTAFF')){
+      this.isHospitalStaff = true;
+    }
+  }
 
   onTabChanged(event: MatTabChangeEvent) 
   {

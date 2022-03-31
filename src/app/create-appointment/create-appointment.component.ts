@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { catchError, map } from 'rxjs/operators';
 import { StateService } from '../services/state.service';
+import { TokenStorageService } from '../services/token-storage.service';
 
 @Component({
   selector: 'app-create-appointment',
@@ -15,12 +16,15 @@ export class CreateAppointmentComponent implements OnInit {
   doctors: any;
   appointmentBooked = false;
   errorBooking = false;
-
+  id: any;
   selectedDoctorID: string = '';
   selectedDoctorName: string = '';
   selectedTime: string = '';
   selectedDate: string = '';
-  constructor(private stateService: StateService) {}
+  constructor(
+    private stateService: StateService,
+    private tokenStorageService: TokenStorageService
+  ) {}
 
   ngOnInit(): void {
     this.refresh();
@@ -44,29 +48,16 @@ export class CreateAppointmentComponent implements OnInit {
       },
       []
     );
+
+    this.availableAppointment.sort(function (a: any, b: any) {
+      return a.date > b.date ? 1 : -1;
+    });
     console.log(this.availableAppointment);
   }
 
   onDateSelect(event: any) {
     this.selectedDate = event.value;
   }
-
-  checkAvailability() {
-    this.availableAppointment = this.appointmentData.filter(
-      (val: any) => val.name == this.selectedDoctorName
-    );
-    this.availableAppointment = this.availableAppointment.reduce(
-      (unique: any, o: any) => {
-        if (!unique.some((obj: any) => obj.date === o.date)) {
-          unique.push(o);
-        }
-        return unique;
-      },
-      []
-    );
-    console.log(this.availableAppointment);
-  }
-
   dateSelected(source: any) {
     console.log(source.value);
     this.availableTime = this.appointmentData.filter(
@@ -74,38 +65,36 @@ export class CreateAppointmentComponent implements OnInit {
         val.name == this.selectedDoctorName && val.date == source.value
     );
     this.availableTime = this.availableTime.map((val: any) => val.time);
+    this.availableTime.sort();
     console.log(this.availableTime);
   }
 
   onSubmit() {
-    console.log(this.selectedDoctorName);
-    console.log(this.selectedDoctorID);
-    console.log(this.selectedTime);
-    console.log(this.selectedDate);
     this.stateService
       .bookAppointment(
+        this.id,
         this.selectedDoctorID,
         this.selectedDate,
         this.selectedTime
       )
       .subscribe(
-        response => {
-          if(response == true){
+        (response) => {
+          if (response == true) {
             this.appointmentBooked = true;
             this.errorBooking = false;
-          }else {
+          } else {
             this.errorBooking = true;
           }
           console.log(response);
-      },
-      error => {
-        this.errorBooking = true;
+        },
+        (error) => {
+          this.errorBooking = true;
           console.log(error);
-      }
+        }
       );
   }
 
-  refresh(){
+  refresh() {
     this.availableTime = null;
     this.selectedDate = '';
     this.selectedTime = '';
@@ -117,8 +106,10 @@ export class CreateAppointmentComponent implements OnInit {
     this.availableTime = null;
     this.doctors = null;
     this.errorBooking = false;
+
+    this.id = this.tokenStorageService.getPatientID();
     this.stateService.fetchListOfAppointments().subscribe((data: any) => {
-      console.log('List of Appointments', data);
+      // console.log('List of Appointments', data);
       this.appointmentData = data;
       var result = data.map((val: any) => ({
         doctorID: val.doctorID,
@@ -135,7 +126,7 @@ export class CreateAppointmentComponent implements OnInit {
         return unique;
       }, []);
       this.doctors = result;
-      console.log('Doctor of Appointments', this.doctors);
+      // console.log('Doctor of Appointments', this.doctors);
     });
   }
 }

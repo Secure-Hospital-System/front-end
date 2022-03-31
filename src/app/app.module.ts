@@ -47,6 +47,9 @@ import { BoardUserComponent } from './board-user/board-user.component';
 import { Auth2fComponent } from './auth2f/auth2f.component';
 import { Auth2fRegistrationComponent } from './auth2f-registration/auth2f-registration.component';
 
+import { DocNamePipe } from './doc-name.pipe';
+import { PendingAppointmentsComponent } from './pending-appointments/pending-appointments.component';
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -79,7 +82,9 @@ import { Auth2fRegistrationComponent } from './auth2f-registration/auth2f-regist
     BoardModeratorComponent,
     BoardUserComponent,
     Auth2fComponent,
-    Auth2fRegistrationComponent
+    Auth2fRegistrationComponent,
+    DocNamePipe,
+    PendingAppointmentsComponent
   ],
   imports: [
     BrowserModule,

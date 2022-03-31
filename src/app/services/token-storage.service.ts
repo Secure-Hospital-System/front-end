@@ -29,10 +29,10 @@ export class TokenStorageService {
   }
 
   public getUserID(){
-    return 46;
-    if(this.getUser() == "Error"){
-      return "46";
-    }
+    // return 46;
+    // if(this.getUser() == "Error"){
+    //   return "46";
+    // }
     return this.getUser().id;
   }
 

@@ -10,7 +10,7 @@
     <mat-icon>close</mat-icon>
   </button>
 </mat-form-field> -->
-<div *ngIf="isDoctor">
+<div *ngIf="isDoctor || isHosptialStaff">
   <span>Enter Patient Id: </span>
   <input #patientID
   (keyup.enter)="storePatientId(patientID.value)">
@@ -86,8 +86,8 @@
                   <td>
                     <mat-form-field class="example-full-width"  appearance="outline">
                     <mat-label>Credit Card</mat-label>
-                    <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" formControlName="CreditCard" id="CreditCard" required>
-                    <mat-hint >{{postalCode.value.length}} / 5</mat-hint>
+                    <input matInput #postalCode maxlength="16" placeholder="Ex. 94105" formControlName="CreditCard" id="CreditCard" required>
+                    <mat-hint >{{postalCode.value.length}} / 16</mat-hint>
                     <mat-error *ngIf="myError('CreditCard', 'required')">Credit Card No. is required</mat-error>
                     <mat-error *ngIf="myError('CreditCard', 'pattern')">Alphabets are not allowed</mat-error>
                     </mat-form-field>
@@ -95,8 +95,8 @@
                   <td>
                     <mat-form-field class="example-full-width"  appearance="outline">
                     <mat-label>Phone Number</mat-label>
-                    <input matInput #postalCode maxlength="5" placeholder="Ex. 94105" formControlName="PhoneNumber" id="PhoneNumber" required>
-                    <mat-hint >{{postalCode.value.length}} / 5</mat-hint>
+                    <input matInput #postalCode maxlength="10" placeholder="Ex. 9410532422" formControlName="PhoneNumber" id="PhoneNumber" required>
+                    <mat-hint >{{postalCode.value.length}} / 10</mat-hint>
                     <mat-error *ngIf="myError('PhoneNumber', 'required')">PhoneNumber is required</mat-error>
                     <mat-error *ngIf="myError('PhoneNumber', 'pattern')">Alphabets are not allowed</mat-error>
                     </mat-form-field>

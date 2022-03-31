@@ -12,10 +12,15 @@ const httpOptions = {
   providedIn: 'root',
 })
 export class StateService {
+  doctors:any;
   constructor(
     private http: HttpClient,
     private tokenStorageService: TokenStorageService
-  ) {}
+  ) {
+
+    this.fetchAllDoctors();
+  }
+
 
   //   // Fetch recipe name from node server which is hosted
   fetchUserDetails(id?: string): Observable<any> {
@@ -63,15 +68,15 @@ export class StateService {
   fetchListOfAppointments(): Observable<any> {
     return this.http.get('http://localhost:4000/api/appointments').pipe(
       map((data: any) => {
-        console.log('appointments', data);
+        // console.log('appointments', data);
         return data;
       })
     );
   }
 
-  bookAppointment(doctorID: any, date: any, time: any): Observable<any> {
+  bookAppointment(patientID:any,doctorID: any, date: any, time: any): Observable<any> {
     var body = {
-      patientID: this.tokenStorageService.getUserID(),
+      patientID: patientID,
       doctorID: doctorID,
       date: date,
       time: time,
@@ -80,19 +85,19 @@ export class StateService {
       .post('http://localhost:4000/api/book/appointment', body)
       .pipe(
         map((data: any) => {
-          console.log('book appointments', data);
+          // console.log('book appointments', data);
           return data;
         })
       );
   }
 
-  viewPatientAppointment(): Observable<any> {
-    return this.http.get('http://localhost:4000/api/patient/appointment/' + this.tokenStorageService.getUserID());
+  viewPatientAppointment(patientID:any): Observable<any> {
+    return this.http.get('http://localhost:4000/api/patient/appointment/' + patientID);
   }
 
-  cancelPatientAppointment(doctorID: any, date: any, time: any): Observable<any> {
+  cancelPatientAppointment(patientID:any,doctorID: any, date: any, time: any): Observable<any> {
     const body = {
-      patientID: this.tokenStorageService.getUserID(),
+      patientID: patientID,
       doctorID: doctorID,
       date: date,
       time: time,
@@ -100,7 +105,31 @@ export class StateService {
     return this.http.post('http://localhost:4000/api/patient/cancel/appointment',body);
   }
 
+  viewAllAppointments():Observable<any> {
+    return this.http.get('http://localhost:4000/api/fetchAllAppointments');
+  }
 
+  approveAppointment(patientID:any,doctorID: any,hospitalStaffID:any, date: any, time: any):Observable<any> {
+    const body = {
+      hospitalStaffID:hospitalStaffID,
+      patientID: patientID,
+      doctorID: doctorID,
+      date: date,
+      time: time,
+    };
+    return this.http.post('http://localhost:4000/api/hospitalStaff/patient/appointment/approve',body);
+  }
+
+  declineAppointment(patientID:any,doctorID: any,hospitalStaffID:any, date: any, time: any):Observable<any> {
+    const body = {
+      hospitalStaffID:hospitalStaffID,
+      patientID: patientID,
+      doctorID: doctorID,
+      date: date,
+      time: time,
+    };
+    return this.http.post('http://localhost:4000/api/hospitalStaff/patient/appointment/decline',body);
+  }
   // Patient Record 
 
   viewPatientRecord(id:any):Observable<any>{
@@ -170,5 +199,28 @@ export class StateService {
     // Get Patient Lab Report
     getPatientLabReport(patientID:any):Observable<any>{
       return this.http.get('http://localhost:4000/api/doctor/patient/report/' + patientID);
+    }
+
+    // Update Patient Profile
+    updatePatientProfile(patientID:any,age:any,gender:any,address:any,phoneNumber:any,creditCard:any):Observable<any>{
+      const body = {
+        patientID: patientID,
+        age: age,
+        gender: gender,
+        address: address,
+        phoneNumber: phoneNumber,
+        creditCard: creditCard
+      };
+      return this.http.post('http://localhost:4000/api/patient/profile/update',body);
+    }
+
+
+    // Fetch List of All Doctors
+
+    fetchAllDoctors(){
+      this.http.get('http://localhost:4000/api/fetchAllDoctors').subscribe(
+        res=> this.doctors=res,
+        error =>console.log(error)
+      )
     }
 }

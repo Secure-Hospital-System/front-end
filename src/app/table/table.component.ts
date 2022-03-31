@@ -56,23 +56,32 @@ export class TableComponent implements OnChanges {
     this.recordSource.data = [];
   }
 
+  sortData(val:any){
+    if(val){
+      val.sort( function(a:any, b:any) {          
+        return a.Date < b.Date ? 1 : -1;
+     });
+    }
+    return val;
+  }
+
   fetchData() {
     this.resetValues();
     this.displayedColumns = this.tokenStorageService
       .getUser()
-      .roles.includes('ROLE_PATIENT')
-      ? ['Nos', 'Date', 'Diagnosis', 'DoctorId', 'PatientId']
-      : ['Nos', 'Date', 'Diagnosis', 'DoctorId', 'PatientId', 'action'];
+      .roles.includes('ROLE_DOCTOR')
+      ? ['Nos', 'Date', 'Diagnosis', 'DoctorId', 'PatientId', 'action']
+      : ['Nos', 'Date', 'Diagnosis', 'DoctorId', 'PatientId'];
     this.displayedColumnsprescription = this.tokenStorageService
       .getUser()
-      .roles.includes('ROLE_PATIENT')
+      .roles.includes('ROLE_DOCTOR')
       ? ['Nos', 'Date', 'Prescription', 'DoctorId', 'PatientId']
       : ['Nos', 'Date', 'Prescription', 'DoctorId', 'PatientId'];
     this.displayedColumnsRecord = this.tokenStorageService
       .getUser()
-      .roles.includes('ROLE_PATIENT')
-      ? ['Nos', 'Date', 'Record', 'DoctorId', 'PatientId']
-      : ['Nos', 'Date', 'Record', 'DoctorId', 'PatientId', 'action'];
+      .roles.includes('ROLE_DOCTOR')
+      ? ['Nos', 'Date', 'Record', 'DoctorId', 'PatientId', 'action']
+      : ['Nos', 'Date', 'Record', 'DoctorId', 'PatientId'];
 
     this.show = this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR');
     this.stateService.fetchUserDiagnosis(this.id).subscribe((data: any) => {
@@ -89,6 +98,7 @@ export class TableComponent implements OnChanges {
         initialData.push(addDiagnosis);
       }
       this.diagnosisSource.data = initialData;
+      this.diagnosisSource.data = this.sortData(this.diagnosisSource.data);
     });
 
     this.stateService.fetchUserPrescription(this.id).subscribe((data: any) => {
@@ -105,6 +115,7 @@ export class TableComponent implements OnChanges {
         initialData.push(addData);
       }
       this.prescriptionSource.data = initialData;
+      this.prescriptionSource.data = this.sortData(this.prescriptionSource.data);
     });
 
     this.stateService.viewPatientRecord(this.id).subscribe((data: any) => {
@@ -122,6 +133,7 @@ export class TableComponent implements OnChanges {
 
 
       this.recordSource.data = initialData;
+      this.recordSource.data = this.sortData(this.recordSource.data);
     });
   }
   edit(data: any) {

@@ -2,11 +2,14 @@
   <h4>Appointments</h4>
 
   <mat-tab-group (selectedTabChange)="onTabChanged($event)">
-    <mat-tab label="Create Appointment">
+    <mat-tab *ngIf="!isHospitalStaff" label="Create Appointment">
         <app-create-appointment></app-create-appointment>
     </mat-tab>
-    <mat-tab label="View Appointment">
+    <mat-tab *ngIf="!isHospitalStaff" label="View Appointment">
         <app-view-appointment></app-view-appointment>
     </mat-tab>
+    <mat-tab *ngIf="isHospitalStaff" label="View Pending Appointments">
+      <app-pending-appointments></app-pending-appointments>
+  </mat-tab>
   </mat-tab-group>
 

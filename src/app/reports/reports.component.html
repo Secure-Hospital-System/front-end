@@ -1,5 +1,5 @@
 
-<div *ngIf="isDoctor">
+<div *ngIf="hasAccess">
   <span>Enter Patient Id: </span>
   <input #patientID
   (keyup.enter)="storePatientId(patientID.value)">
@@ -31,7 +31,7 @@
     <!-- report Column -->
     <ng-container matColumnDef="doctor">
       <th mat-header-cell *matHeaderCellDef> Doctor </th>
-      <td mat-cell *matCellDef="let element"> {{element.recommender}} </td>
+      <td mat-cell *matCellDef="let element"> {{element.recommender | docname}} </td>
     </ng-container>
   
     <!-- doctor Column -->

@@ -7,8 +7,8 @@ import { TokenStorageService } from '../services/token-storage.service';
   styleUrls: ['./dashboard.component.css'],
 })
 export class DashboardComponent implements OnInit {
-  displayDashboard :any ;
-  patientDashBoard = [
+  // displayDashboard :any ;
+  displayDashboard = [
     {
       title: 'Appointments',
       icon: 'local_hospital',
@@ -56,6 +56,43 @@ export class DashboardComponent implements OnInit {
     },
   ];
 
+  hospitalStaffDashboard = [
+    {
+      title: 'Appointments',
+      icon: 'local_hospital',
+      redirectUrl: '/appointments',
+    },
+    {
+      title: 'Records',
+      icon: 'description',
+      redirectUrl: '/records',
+    },
+    {
+      title: 'User Profile',
+      icon: 'person',
+      redirectUrl: '/patients',
+    },
+    {
+      title: 'Reports',
+      icon: 'description',
+      redirectUrl: '/reports',
+    },
+    {
+      title: 'Payments',
+      icon: 'payment',
+      redirectUrl: '/payment',
+    },
+    {
+      title: 'Diagnosis',
+      icon: 'storage',
+      redirectUrl: '/diagnosis',
+    },
+    {
+      title: 'Prescription',
+      icon: 'description',
+      redirectUrl: '/prescription',
+    }
+  ];
 
   doctorDashBoard = [
     {
@@ -88,8 +125,12 @@ export class DashboardComponent implements OnInit {
   constructor(private tokenStorageService: TokenStorageService) {}
 
   ngOnInit(): void {
-    if(this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR')){
+    if(this.tokenStorageService.getUser().roles && this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR')){
       this.displayDashboard = this.doctorDashBoard;
+    }
+
+    if(this.tokenStorageService.getUser().roles && this.tokenStorageService.getUser().roles.includes('ROLE_HOSPITALSTAFF')){
+      this.displayDashboard = this.hospitalStaffDashboard;
     }
   }
 

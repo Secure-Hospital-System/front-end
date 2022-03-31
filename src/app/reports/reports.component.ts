@@ -22,7 +22,7 @@ export interface PeriodicElement {
 export class ReportsComponent implements OnInit {
   displayedColumns: string[] = ['date', 'doctor','testName','status','record'];
   dataSource = new MatTableDataSource()
-  public isDoctor = false;
+  public hasAccess = false;
   public id:any;
   storePatientId(id: string) {
     console.log(id);
@@ -37,8 +37,11 @@ export class ReportsComponent implements OnInit {
 
   ngOnInit(): void {
    
-    if( this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR')){
-      this.isDoctor= true;
+    if( this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR') || this.tokenStorageService.getUser().roles.includes('ROLE_HOSPITALSTAFF')){
+      this.hasAccess= true;
+    } else {
+      this.id = this.tokenStorageService.getPatientID();
+      this.fetchPatientReport(this.id);
     }
     
   }
