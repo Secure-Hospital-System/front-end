@@ -26,20 +26,24 @@
           </td>
         </tr>
       </table>
-<!-- 
       <table>
         <tr>
           <td>
-            <mat-form-field class="example-full-width"  appearance="outline">
+            <mat-form-field appearance="fill" appearance="outline" >
               <mat-label>Lab Test</mat-label>
-              <textarea matInput placeholder="Ex. 100 Main St" formControlName="Labtest" id="Labtest"required></textarea>
-                <mat-error *ngIf="myError('Labtest', 'required')">Labtest Name is required</mat-error>
-                <mat-error *ngIf="myError('Labtest', 'maxlength')">Not more than 50 characters</mat-error>
+              <mat-select formControlName="LabTest" id="LabTest" required>
+                <mat-option value="None">None</mat-option>
+                <mat-option value="Complete Blood Count">Complete Blood Count</mat-option>
+                <mat-option value="Urinalysis">Urinalysis</mat-option>
+                <mat-option value="Diabetes">Diabetes</mat-option>
+                <mat-option value="Lipid">Lipid</mat-option>
+                <mat-option value="Liver">Liver</mat-option>
+              </mat-select>
+              <mat-error *ngIf="myError('LabTest', 'required')">LabTest is required</mat-error>
             </mat-form-field>
-            
           </td>
         </tr>
-      </table> -->
+      </table>
       <button mat-raised-button (click)="save(myForm.value)"  color="primary" style="margin:10px" >Save</button>
       <!-- Button for editing the patient data -->
       <button mat-raised-button (click)="onNoClick()" color="accent" style="margin:10px" >Cancel</button>

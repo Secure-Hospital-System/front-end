@@ -144,7 +144,7 @@ export class TableComponent implements OnChanges {
   }
 
   createDiagnosis() {
-    var data = { Date: '', Diagnosis: '' };
+    var data = { Date: '', Diagnosis: '', LabTest:'' };
     this.dialog.openDialog(data, 'createDiagnosis');
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Inject } from '@angular/core';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, FormGroup, Validators, FormsModule } from '@angular/forms';
 import { Output, EventEmitter } from '@angular/core';
 
 
@@ -17,7 +17,7 @@ export class DialogComponent implements OnInit {
     {value: 'pizza-1', viewValue: 'Pizza'},
     {value: 'tacos-2', viewValue: 'Tacos'},
   ];
-  
+
   @Input()
   btnname: string="Create";
   data: any;
@@ -92,8 +92,9 @@ export class DialogOverviewExampleDialog {
     this.myForm = new FormGroup({
       Diagnosis: new FormControl('', [Validators.required, Validators.maxLength(50)]),
       Date: new FormControl('', [Validators.required]),
+      LabTest: new FormControl('',[Validators.required])
       });
-    this.myForm.setValue({Diagnosis:this.data.Diagnosis, Date:this.data.Date})
+    this.myForm.setValue({Diagnosis:this.data.Diagnosis, Date:this.data.Date, LabTest:this.data.LabTest})
   }
 
   onNoClick(): void {
@@ -119,5 +120,6 @@ export class DialogOverviewExampleDialog {
 export interface DialogData {
   Diagnosis: string;
   Date: string;
+  LabTest: string
 }
 
