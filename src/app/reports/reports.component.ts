@@ -63,6 +63,7 @@ export class ReportsComponent implements OnInit {
   }
 
   edit(data:any){
+    console.log(data)
     this.dialog.openDialog(data,"edit")
   }
 

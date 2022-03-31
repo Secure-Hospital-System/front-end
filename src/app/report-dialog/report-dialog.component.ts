@@ -16,7 +16,7 @@ export class ReportDialogComponent implements OnInit {
   constructor(public dialog: MatDialog) {}
 
   @Input()
-  btnname: string="Create"; 
+  btnname: string="Create";
   data: any;
   ty: any;
   val:any;
@@ -44,6 +44,7 @@ export class ReportDialogComponent implements OnInit {
   }
 
   openDialog(val:any,act:string): void {
+    console.log(val)
     this.ty = act
     this.curpos = val.position
     const dialogRef = this.dialog.open(ReportDialogComponent3, {
@@ -70,25 +71,25 @@ export class ReportDialogComponent implements OnInit {
 
 
 export class ReportDialogComponent3 {
-  
+
   constructor(
     public dialogRef: MatDialogRef<ReportDialogComponent3>,
     @Inject(MAT_DIALOG_DATA) public data: DialogData,
   ) {}
-  
+
   public myForm! : FormGroup;
-  
+
   states: string[] = [
     'Alabama',
     'Alaska',
     'Arizona',
     'Arkansas',
     'California',
-    'Colorado' 
+    'Colorado'
   ];
 
   @Output() datachange = new EventEmitter<Object>();
-  
+
   ngOnInit(): void {
     //Creating the myForm Data and validating each input field.
     this.myForm = new FormGroup({
@@ -96,18 +97,18 @@ export class ReportDialogComponent3 {
       Date: new FormControl('', [Validators.required]),
       LabTest: new FormControl('', [Validators.required]),
       });
-    this.myForm.setValue({FirstName:this.data.doctor, Date:this.data.date, LabTest:this.data.report})  
+    this.myForm.setValue({FirstName:this.data.recommender, Date:new Date(this.data.dateFilled), LabTest:this.data.testName})
   }
 
   onNoClick(): void {
     this.dialogRef.close("close");
   }
-  
+
   //Error Function for alerting error on incorrect input in the form
   public myError = (controlName: string, errorName: string) =>{
     return this.myForm.controls[controlName].hasError(errorName);
   }
-  
+
   //Save function executed after submitting the patient input data.
   save(data:any) {
     this.dialogRef.close(data);
@@ -120,9 +121,18 @@ export class ReportDialogComponent3 {
 }
 
 export interface DialogData {
-  date: string;
-  doctor: string;
-  position: Number;
-  report:Number;
+  address: string,
+  age: number,
+  creditCard: string,
+  dateFilled: string,
+  dateRecommended: string,
+  gender: string,
+  inputter: string,
+  patientID: number,
+  phoneNumber: string,
+  recommender: number,
+  record: string,
+  status: string,
+  testName: string,
 }
 
