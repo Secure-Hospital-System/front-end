@@ -135,11 +135,11 @@
             <td mat-cell *matCellDef="let element" class="action-link">
               <app-prescription-dialog
                 user="prescription"
-                btnname="Edit"
+                btnname="edit"
                 (click)="edit1(element)"
               ></app-prescription-dialog>
-              <button mat-raised-button color="warn" (click)="delete1(element)">
-                Delete
+              <button mat-icon-button (click)="delete1(element)">
+                <mat-icon>close</mat-icon>
               </button>
             </td>
           </ng-container>
@@ -167,7 +167,13 @@
 
         <ng-template [ngIf]="show">
           <div>
-            <!-- <app-prescription-dialog user="prescription" (datachange)= "addPrescription($event)" btnname="Create" (click)="create1()" style="margin-left:280px"></app-prescription-dialog> -->
+            <app-recorddialog
+              user="record"
+              (datachange)= "addRecord($event)"
+              btnname="add_circle"
+              (click)="create2()"
+              style="margin-left:280px">
+            </app-recorddialog>
           </div>
         </ng-template>
       </mat-card-header>
@@ -206,13 +212,13 @@
           <ng-container matColumnDef="action">
             <th mat-header-cell *matHeaderCellDef>Action</th>
             <td mat-cell *matCellDef="let element" class="action-link">
-              <!-- <app-prescription-dialog user="prescription" btnname="Edit" (click) = "edit1(element)" ></app-prescription-dialog> -->
-              <button
-                mat-raised-button
-                color="warn"
-                (click)="deleteRecord(element)"
-              >
-                Delete
+              <app-recorddialog
+                user="record"
+                btnname="edit"
+                (click) = "edit2(element)" >
+              </app-recorddialog>
+              <button mat-icon-button (click)="deleteRecord(element)">
+                <mat-icon>close</mat-icon>
               </button>
             </td>
           </ng-container>

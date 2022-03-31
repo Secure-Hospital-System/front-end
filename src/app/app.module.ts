@@ -29,6 +29,7 @@ import { DialogComponent } from './dialog/dialog.component';
 import { DialogOverviewExampleDialog } from './dialog/dialog.component';
 import { PrescriptionDialogComponent } from './prescription-dialog/prescription-dialog.component';
 import { DialogOverviewExampleDialog1 } from './prescription-dialog/prescription-dialog.component';
+import { DialogOverviewExampleDialog2 } from './recorddialog/recorddialog.component';
 
 import { ChatComponent } from './chat/chat.component';
 import { ChatService } from './chat/chat.service';
@@ -49,6 +50,7 @@ import { Auth2fRegistrationComponent } from './auth2f-registration/auth2f-regist
 
 import { DocNamePipe } from './doc-name.pipe';
 import { PendingAppointmentsComponent } from './pending-appointments/pending-appointments.component';
+import { RecorddialogComponent } from './recorddialog/recorddialog.component';
 
 @NgModule({
   declarations: [
@@ -70,6 +72,7 @@ import { PendingAppointmentsComponent } from './pending-appointments/pending-app
     DialogOverviewExampleDialog,
     PrescriptionDialogComponent,
     DialogOverviewExampleDialog1,
+    DialogOverviewExampleDialog2,
     DoctorComponent,
     ChatComponent,
     MessageComponent,
@@ -84,7 +87,8 @@ import { PendingAppointmentsComponent } from './pending-appointments/pending-app
     Auth2fComponent,
     Auth2fRegistrationComponent,
     DocNamePipe,
-    PendingAppointmentsComponent
+    PendingAppointmentsComponent,
+    RecorddialogComponent
   ],
   imports: [
     BrowserModule,

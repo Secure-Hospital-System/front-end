@@ -20,15 +20,17 @@
           <td>
             <mat-form-field class="example-full-width"  appearance="outline">
               <mat-label>Date</mat-label>
-                <input matInput formControlName="Date" id="Date" required>
-                <mat-error *ngIf="myError('Date', 'required')">Date is required</mat-error>
+                <input matInput [matDatepicker]="picker" formControlName="Date" id="Date" required>
+                  <mat-error *ngIf="myError('Date', 'required')">Date is required</mat-error>
+                  <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                  <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
           </td>
         </tr>
       </table>
       <table>
         <tr>
-          <td>  
+          <td>
             <mat-form-field class="example-full-width" appearance="fill">
               <mat-label>Report</mat-label>
                 <input matInput formControlName="LabTest" id="LabTest" required>
@@ -37,7 +39,7 @@
           </td>
         </tr>
       </table>
-      
+
           <button mat-raised-button (click)="save(myForm.value)"  color="primary" style="margin:10px" >Save</button>
           <!-- Button for editing the patient data -->
           <button mat-raised-button (click)="onNoClick()" color="accent" style="margin:10px" >Cancel</button>

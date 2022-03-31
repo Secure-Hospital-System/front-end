@@ -20,7 +20,7 @@ export interface PeriodicElement {
 })
 
 export class ReportsComponent implements OnInit {
-  displayedColumns: string[] = ['date', 'doctor','testName','status','record'];
+  displayedColumns: string[] = ['date', 'doctor','testName','status','record','action'];
   dataSource = new MatTableDataSource()
   public hasAccess = false;
   public id:any;
@@ -36,14 +36,14 @@ export class ReportsComponent implements OnInit {
   constructor(private stateService: StateService, private tokenStorageService: TokenStorageService) { }
 
   ngOnInit(): void {
-   
+
     if( this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR') || this.tokenStorageService.getUser().roles.includes('ROLE_HOSPITALSTAFF')){
       this.hasAccess= true;
     } else {
       this.id = this.tokenStorageService.getPatientID();
       this.fetchPatientReport(this.id);
     }
-    
+
   }
 
   fetchPatientReport(id:any){
@@ -55,47 +55,47 @@ export class ReportsComponent implements OnInit {
       error => console.log(error)
     )
   }
-  // delete(data:any){
-  //   var value = this.dataSource.data.filter(function(item) {
-  //     return item !== data
-  //   })
-  //   this.dataSource.data = value
-  // }
+  delete(data:any){
+    var value = this.dataSource.data.filter(function(item) {
+      return item !== data
+    })
+    this.dataSource.data = value
+  }
 
-  // edit(data:any){
-  //   this.dialog.openDialog(data,"edit")
-  // }
+  edit(data:any){
+    this.dialog.openDialog(data,"edit")
+  }
 
-  // add(data:any){
-  //   var values = this.dataSource.data
-  //   if (data[1]=="create"){
-  //     var position = values.length+1
-  //     values.push({
-  //       "doctor":data[0].FirstName,
-  //       "report":data[0].LabTest,
-  //       "date":data[0].Date,
-  //       "position":position
-  //     })
-  //   }
-  //   else if (data[1]=="edit"){
-  //     var curpos = data[2]-1
-  //     values[curpos]={
-  //       "doctor":data[0].FirstName,
-  //       "report":data[0].LabTest,
-  //       "date":data[0].Date,
-  //       "position":curpos
-  //     };
-  //   }
-  //   this.dataSource.data =values
-  // }
+  add(data:any){
+    var values = this.dataSource.data
+    if (data[1]=="create"){
+      var position = values.length+1
+      values.push({
+        "doctor":data[0].FirstName,
+        "report":data[0].LabTest,
+        "date":data[0].Date,
+        "position":position
+      })
+    }
+    else if (data[1]=="edit"){
+      var curpos = data[2]-1
+      values[curpos]={
+        "doctor":data[0].FirstName,
+        "report":data[0].LabTest,
+        "date":data[0].Date,
+        "position":curpos
+      };
+    }
+    this.dataSource.data =values
+  }
 
-  // create(){
-  //   var data = {"doctor":"",
-  //       "report":"",
-  //       "date":"",
-  //       "position":""}
-  //   this.dialog.openDialog(data,"create")
+  create(){
+    var data = {"doctor":"",
+        "report":"",
+        "date":"",
+        "position":""}
+    this.dialog.openDialog(data,"create")
 
-  // }
+  }
 
 }

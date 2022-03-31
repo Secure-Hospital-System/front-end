@@ -11,6 +11,7 @@ import { StateService } from '../services/state.service';
 import { MatTableDataSource } from '@angular/material/table';
 import { DialogComponent } from '../dialog/dialog.component';
 import { PrescriptionDialogComponent } from '../prescription-dialog/prescription-dialog.component';
+import { RecorddialogComponent } from '../recorddialog/recorddialog.component';
 import { TokenStorageService } from '../services/token-storage.service';
 
 //Table Component
@@ -40,6 +41,7 @@ export class TableComponent implements OnChanges {
 
   @ViewChild(DialogComponent) dialog!: DialogComponent;
   @ViewChild(PrescriptionDialogComponent) dialog1!: PrescriptionDialogComponent;
+  @ViewChild(RecorddialogComponent) dialog2!: RecorddialogComponent;
 
   ngOnChanges() {
     if (this.id) {
@@ -58,7 +60,7 @@ export class TableComponent implements OnChanges {
 
   sortData(val:any){
     if(val){
-      val.sort( function(a:any, b:any) {          
+      val.sort( function(a:any, b:any) {
         return a.Date < b.Date ? 1 : -1;
      });
     }
@@ -75,7 +77,7 @@ export class TableComponent implements OnChanges {
     this.displayedColumnsprescription = this.tokenStorageService
       .getUser()
       .roles.includes('ROLE_DOCTOR')
-      ? ['Nos', 'Date', 'Prescription', 'DoctorId', 'PatientId']
+      ? ['Nos', 'Date', 'Prescription', 'DoctorId', 'PatientId','action']
       : ['Nos', 'Date', 'Prescription', 'DoctorId', 'PatientId'];
     this.displayedColumnsRecord = this.tokenStorageService
       .getUser()
@@ -85,6 +87,7 @@ export class TableComponent implements OnChanges {
 
     this.show = this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR');
     this.stateService.fetchUserDiagnosis(this.id).subscribe((data: any) => {
+      console.log(data)
       var initialData = this.diagnosisSource.data;
       // var i = initialData.length;
       for (let i = 0; i < data.length; i++) {
@@ -149,9 +152,18 @@ export class TableComponent implements OnChanges {
     this.dialog1.openDialog(data, 'edit');
   }
 
+  edit2(data: any) {
+    this.dialog2.openDialog(data, 'edit');
+  }
+
   create1() {
     var data = { Date: '', Prescription: '' };
     this.dialog1.openDialog(data, 'createDiagnosis');
+  }
+
+  create2() {
+    var data = { Date: '', Record: '' };
+    this.dialog2.openDialog(data, 'createDiagnosis');
   }
 
   addDiagnosis(data: any) {
@@ -237,7 +249,7 @@ export class TableComponent implements OnChanges {
   }
 
   addRecord(data: any) {
-    console.log(data);
+    // console.log(data);
     var value = this.recordSource.data;
     var l = value.length;
     if (data[1] == 'edit') {
@@ -245,14 +257,28 @@ export class TableComponent implements OnChanges {
       value[data[2] - 1].Record = data[0].Record;
       this.recordSource.data = value;
     } else {
-      value.push({
-        Nos: l + 1,
-        Date: data[0].Date,
-        Record: data[0].Record,
-        PatientId: value[l - 1].PatientId,
-        DoctorId: value[l - 1].DoctorId,
-      });
-      this.recordSource.data = value;
+      this.stateService
+        .createPatientPrescription(
+          value[l - 1].PatientId,
+          value[l - 1].DoctorId,
+          data[0].Date,
+          data[0].Record
+        )
+        .subscribe(
+          (res) => {
+            value.push({
+              Nos: l + 1,
+              Date: data[0].Date,
+              Record: data[0].Record,
+              PatientId: value[l - 1].PatientId,
+              DoctorId: value[l - 1].DoctorId,
+            });
+            this.recordSource.data = value;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     }
   }
 
