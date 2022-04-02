@@ -140,6 +140,7 @@ export class TableComponent implements OnChanges {
     });
   }
   edit(data: any) {
+    data['LabTest'] = ""
     this.dialog.openDialog(data, 'edit');
   }
 

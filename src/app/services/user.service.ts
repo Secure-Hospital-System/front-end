@@ -1,6 +1,9 @@
+
+import { HttpClient, HttpHeaders, HttpErrorResponse } from '@angular/common/http'
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs'
+import { map } from 'rxjs/operators';
+
 const API_URL = 'http://ec2-54-235-234-187.compute-1.amazonaws.com:8080/api/test/';
 @Injectable({
   providedIn: 'root'
@@ -18,5 +21,46 @@ export class UserService {
   }
   getAdminBoard(): Observable<any> {
     return this.http.get(API_URL + 'admin', { responseType: 'text' });
+  }
+
+  fetchPendingBills(): Observable<any> {
+    return this.http.get('http://18.233.8.27:8080/api/insurance/query4').pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+  updateApprovedBills(bill?:string,amount?:number,approver?:number): Observable<any> {
+    console.log('http://18.233.8.27:8080/api/insurance/query5/'+bill+'/'+approver+'/'+amount)
+    return this.http.get('http://18.233.8.27:8080/api/insurance/query5/'+bill+'/'+approver+'/'+amount).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+  fetchApprovedBills(): Observable<any> {
+    return this.http.get('http://18.233.8.27:8080/api/insurance/query6').pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+  fetchInsurancePolicy(): Observable<any> {
+    return this.http.get('http://18.233.8.27:8080/api/insurance/policies').pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+  addInsurancePolicy(amount?:string,patientID?:string,policyDetails?:string): Observable<any> {
+    return this.http.get('http://18.233.8.27:8080/api/insurance/policy/create/'+patientID+'/'+amount+'/'+policyDetails).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
   }
 }

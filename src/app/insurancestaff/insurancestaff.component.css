@@ -1,0 +1,87 @@
+table {
+  width: 90%;
+  margin: auto;
+}
+
+h2 {
+  text-align: center;
+  padding-top: 20px;
+}
+
+.table-header {
+  width: 90%;
+  margin: auto;
+  text-align: right;
+  margin-bottom: 10px;
+}
+
+.button-add-row {
+  background: #1b9e1b;
+  color: #ffffff;
+}
+
+.button-remove-rows {
+  background: red;
+  color: #ffffff;
+  margin-right: 5px;
+}
+
+.button-remove {
+  color: red;
+}
+
+
+table{
+  width:100%;
+}
+
+.table1{
+  padding-top:10px
+}
+
+.table2{
+  padding-top:10px
+}
+
+.mat-card {
+  padding: 0px !important;
+  width: 90%;
+  margin-top:10px;
+  margin-left:10px;
+}
+
+.mat-card-header {
+  background-color: grey;
+  color: white;
+  border-radius: 4px 4px 0 0;
+  width: 100%;
+}
+
+.mat-card-title {
+  font-weight: 100 !important;
+  margin: 8px 0px !important;
+  width: 100%;
+}
+
+.mat-card-content {
+  width: 100%;
+}
+
+.example-h2 {
+  margin: 10px;
+}
+
+.example-section {
+  display: flex;
+  align-content: center;
+  align-items: center;
+  height: 60px;
+}
+
+.example-margin {
+  margin: 0 10px;
+}
+
+.example-form{
+margin:10px
+}

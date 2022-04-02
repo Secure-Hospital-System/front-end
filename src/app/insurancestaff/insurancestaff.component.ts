@@ -1,12 +1,10 @@
-
-import { isDataSource } from '@angular/cdk/collections';
-import {AfterViewInit, Component, Input, OnInit, ViewChild, ɵɵtrustConstantResourceUrl} from '@angular/core';
-import { StateService } from '../services/state.service';
+import { Component, Input, OnInit } from '@angular/core';
+import { ConfirmDialogComponent } from '../confirm-dialog/confirm-dialog.component';
+import {MatDialog} from '@angular/material/dialog';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import {MatTableDataSource} from '@angular/material/table';
-import { DialogComponent } from '../dialog/dialog.component';
-import { PrescriptionDialogComponent } from '../prescription-dialog/prescription-dialog.component';
-
+import { UserService } from '../services/user.service';
 @Component({
   selector: 'app-insurancestaff',
   templateUrl: './insurancestaff.component.html',
@@ -14,103 +12,150 @@ import { PrescriptionDialogComponent } from '../prescription-dialog/prescription
 })
 export class InsurancestaffComponent implements OnInit {
 
-  constructor(private stateService: StateService) {}
+  constructor(private stateService: UserService, public dialog: MatDialog) { }
   id = "1";
   @Input()
   diagnosisdata!: Object;
 
   //Column to be displayed for the table.
+  public myForm!: FormGroup;
   displayedColumns!: string[]
+  approveColumns!: string[]
+  policyColumns!: string[]
   //Adding the table data to datasource
   dataSource = new MatTableDataSource(ELEMENT_DATA);
-  prescriptionSource = new MatTableDataSource(Prescription_Data);
+  approvedTable = new MatTableDataSource(APPROVE_DATA);
+  policiyTable = new MatTableDataSource(POLICY_DATA);
 
-  @ViewChild(DialogComponent) dialog!: DialogComponent;
-  @ViewChild(PrescriptionDialogComponent) dialog1!: PrescriptionDialogComponent;
+
+  //Error Function for alerting error on incorrect input in the form
+  public myError = (controlName: string, errorName: string) => {
+    return this.myForm.controls[controlName].hasError(errorName);
+  };
 
   //Assigning the paginatior for limiting the no. of rows.
   ngOnInit(){
     //Column to be displayed for the table.
-    this.displayedColumns = ["Nos",'Date', 'Diagnosis', 'DoctorId', 'PatientId','action'];
+    this.displayedColumns = ["BillID",'Claim Amount', 'Approve Amount', 'Claim Request Date', 'action'];
+    this.approveColumns = ["BillID",'Claim Amount', 'Approve Amount', 'Claim Request Date','Approver'];
+    this.policyColumns = ["amount",'policyDetails', 'patientID', 'policyID'];
 
-    this.stateService.fetchUserDiagnosis(this.id).subscribe((data: any) => {
-      var initialData = this.dataSource.data
-      var i = initialData.length;
-      var add = {
-        "Nos": i+1,
-        "Date": data.date,
-        "Diagnosis": data.diagnosis,
-        "DoctorId": data.doctorID,
-        "PatientId": data.patientID
+    this.myForm = new FormGroup({
+      patient: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+      ]),
+      policyDetails: new FormControl('', [
+        Validators.required,
+        Validators.maxLength(50),
+      ]),
+      amount: new FormControl('', [
+        Validators.required,
+        Validators.pattern('^[0-9]*$'),
+      ])
+    });
+
+    this.stateService.fetchPendingBills().subscribe((data: any) => {
+      var initialData = this.dataSource.data;
+      for(var i = 0; i<data.length;i+=1){
+        var add = {
+          "BillID": data[i].billID.toString(),
+          "ClaimedAmount": data[i].claimedAmount,
+          "ApproveAmount": data[i].approvedAmount,
+          "ClaimRequestDate": data[i].dateOfRequest,
+        }
+        initialData.push(add);
       }
-      initialData.push(add);
-
       this.dataSource.data = initialData;
     });
 
+    this.stateService.fetchApprovedBills().subscribe((data: any) => {
+      var iData = this.approvedTable.data;
+      for(var i = 0; i<data.length;i+=1){
+        var add = {
+          "BillID": data[i].billID,
+          "ClaimedAmount": data[i].claimedAmount,
+          "ApproveAmount": data[i].approvedAmount,
+          "ClaimRequestDate": data[i].dateOfRequest,
+          "ApproverId": data[i].approver
+        }
+        iData.push(add);
+      }
+      this.approvedTable.data = iData;
+    });
+
+    this.stateService.fetchInsurancePolicy().subscribe((data:any)=>{
+      var iData = this.policiyTable.data;
+
+      for(var i = 0; i<data.length;i+=1){
+        var add = {
+          "amount": data[i].amount,
+          "policyID": data[i].policyID,
+          "policyDetails": data[i].policyDetails,
+          "patientID": data[i].patientID,
+        }
+        iData.push(add);
+      }
+      this.policiyTable.data = iData;
+    });
   }
+
   ngAfterViewInit() {
   }
 
-  edit(data:any){
-    this.dialog.openDialog(data,"edit",)
+  save(data:any){
+    console.log(data)
+    this.stateService.addInsurancePolicy(data.amount,data.patient,data.policyDetails).subscribe((data:any)=>{
+      window.location.reload();
+    })
   }
 
-  create(){
-    var data ={Date:"",Diagnosis:""}
-    this.dialog.openDialog(data,"create")
+  edit(){
+
   }
 
   add(data:any){
-    var value = this.dataSource.data
-    var l = value.length
-    if (data[1]=="edit"){
-      value[data[2]-1].Date=data[0].Date
-      value[data[2]-1].Diagnosis=data[0].Diagnosis
-      this.dataSource.data = value
-    }
-    else{
-      value.push({
-        "Nos": l+1,
-        "Date": data[0].Date,
-        "Diagnosis": data[0].Diagnosis,
-        "PatientId":value[l-1].PatientId,
-        "DoctorId":value[l-1].DoctorId
-      })
-      this.dataSource.data = value
-    }
+    this.dialog.open(ConfirmDialogComponent).afterClosed().subscribe(confirm => {
+    this.stateService.updateApprovedBills(data.BillID,confirm,8).subscribe((data:any)=>{
+      console.log(data)
+      window.location.reload();
+    })
+  });
   }
 
   delete(data:any){
-    var value = this.dataSource.data.filter(function(item) {
-      return item !== data
+    this.stateService.updateApprovedBills(data.BillID,0,8).subscribe((data:any)=>{
+      window.location.reload();
     })
-    for(var i=0;i<value.length;i+=1){
-      value[i].Nos = i+1
-    }
-    this.dataSource.data = value
   }
 }
 
 //Creating the Table Element interface for table data type
 export interface Diagnosis {
-  Nos: Number;
-  Date: string;
-  Diagnosis: string;
-  DoctorId: string;
-  PatientId: string;
+  BillID: String;
+  ClaimedAmount: string;
+  ApproveAmount: string;
+  ClaimRequestDate: string;
 }
 
-export interface Prescription {
-  Nos: Number;
-  Date: string;
-  Prescription: string;
-  DoctorId: string;
-  PatientId: string;
+export interface Approve {
+  BillID: String;
+  ClaimedAmount: string;
+  ApproveAmount: string;
+  ClaimRequestDate: string;
+  ApproverId: string;
+}
+
+export interface Policy {
+  amount: String;
+  policyID: string;
+  policyDetails: string;
+  patientID: string;
 }
 
 //Creating dummy data for inserting in the tables.
 const ELEMENT_DATA: Diagnosis[] = [];
+const APPROVE_DATA: Approve[] = [];
+const POLICY_DATA: Policy[] = [];
 
-const Prescription_Data: Prescription[] = [];
 

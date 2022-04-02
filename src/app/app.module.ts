@@ -36,7 +36,8 @@ import { ChatService } from './chat/chat.service';
 import { MessageComponent } from './message/message.component';
 import { CommonModule } from '@angular/common';
 import { ChatbotComponent } from './chatbot/chatbot.component';
-
+import { ConfirmDialogComponent } from './confirm-dialog/confirm-dialog.component';
+import { InsurancestaffComponent } from './insurancestaff/insurancestaff.component';
 import { authInterceptorProviders } from './_helpers/auth.interceptor';
 import { LoginComponent } from './login/login.component';
 import { RegisterComponent } from './register/register.component';
@@ -68,6 +69,8 @@ import { RecorddialogComponent } from './recorddialog/recorddialog.component';
     ReportDialogComponent,
     UserComponent,
     TableComponent,
+    ConfirmDialogComponent,
+    InsurancestaffComponent,
     DialogComponent,
     DialogOverviewExampleDialog,
     PrescriptionDialogComponent,

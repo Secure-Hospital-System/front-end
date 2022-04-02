@@ -1,0 +1,5 @@
+<h1 mat-dialog-title>Enter the amount to be approved for the claim</h1>
+<input #todo matInput type="number" name="todo" placeholder="Enter the amount">
+<div mat-dialog-actions>
+    <button class="delete-button" mat-button [mat-dialog-close]="todo.value">Approve</button>
+</div>

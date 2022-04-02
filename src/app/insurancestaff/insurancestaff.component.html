@@ -1,62 +1,205 @@
 <!-- Diagnosis Table -->
-<div class="table1">
-  <mat-card>
 
-    <!-- Table Title -->
-    <mat-card-header>
-      <mat-card-title>Diagnosis Details</mat-card-title>
+<mat-tab-group color="warn">
+  <mat-tab label="New Insurances">
+    <div class="table1">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Insurance Pending Approval</mat-card-title>
+        </mat-card-header>
+        <!-- Table Title -->
+        <mat-card-content>
 
-        <div>
-          <app-dialog user="diagnosis" (datachange)= "add($event)" btnname="Create" (click)="create()" style="margin-left:300px"></app-dialog>
-        </div>
-    </mat-card-header>
-    <mat-card-content>
+        <!-- Inserting the data source -->
+        <table mat-table [dataSource]="dataSource">
 
-    <!-- Inserting the data source -->
-    <table mat-table [dataSource]="dataSource">
-
-      <ng-container matColumnDef="Nos">
-        <th mat-header-cell *matHeaderCellDef> Nos. </th>
-        <td mat-cell *matCellDef="let element"> {{element.Nos}} </td>
-      </ng-container>
-
-      <!-- Position Column -->
-      <ng-container matColumnDef="Date">
-        <th mat-header-cell *matHeaderCellDef> Date. </th>
-        <td mat-cell *matCellDef="let element"> {{element.Date}} </td>
-      </ng-container>
-
-      <!-- Name Column -->
-      <ng-container matColumnDef="Diagnosis">
-        <th mat-header-cell *matHeaderCellDef> Diagnosis </th>
-        <td mat-cell *matCellDef="let element"> {{element.Diagnosis}} </td>
-      </ng-container>
-
-      <!-- Weight Column -->
-      <ng-container matColumnDef="DoctorId">
-        <th mat-header-cell *matHeaderCellDef> Doctor ID </th>
-        <td mat-cell *matCellDef="let element"> {{element.DoctorId}} </td>
-      </ng-container>
-
-      <!-- Symbol Column -->
-      <ng-container matColumnDef="PatientId">
-        <th mat-header-cell *matHeaderCellDef > Patient ID </th>
-        <td mat-cell *matCellDef="let element"> {{element.PatientId}} </td>
-      </ng-container>
-
-        <div>
-          <ng-container matColumnDef="action">
-            <th mat-header-cell *matHeaderCellDef> Action </th>
-            <td mat-cell *matCellDef="let element" class="action-link">
-              <app-dialog user="diagnosis" btnname="Edit" (click) = "edit(element)" ></app-dialog>
-              <button mat-raised-button color="warn" (click)="delete(element)">Delete</button>
-            </td>
+          <ng-container matColumnDef="BillID">
+            <th mat-header-cell *matHeaderCellDef> Bill Id. </th>
+            <td mat-cell *matCellDef="let element"> {{element.BillID}} </td>
           </ng-container>
-        </div>
-      <!-- For Diaplaying table data-->
-      <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-    </table>
-    </mat-card-content>
-  </mat-card>
-</div>
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="Claim Amount">
+            <th mat-header-cell *matHeaderCellDef> Claim Amount </th>
+            <td mat-cell *matCellDef="let element"> {{element.ClaimedAmount}} </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="Approve Amount">
+            <th mat-header-cell *matHeaderCellDef> Approval Amount </th>
+            <td mat-cell *matCellDef="let element"> {{element.ApproveAmount}} </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="Claim Request Date">
+            <th mat-header-cell *matHeaderCellDef>  Claim Request Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.ClaimRequestDate}} </td>
+          </ng-container>
+
+            <div>
+              <ng-container matColumnDef="action">
+                <th mat-header-cell *matHeaderCellDef> Action </th>
+                <td mat-cell *matCellDef="let element" class="action-link">
+                  <button mat-raised-button color="primary" (click)="add(element)">Approve</button>
+                  <button mat-raised-button color="warn" (click)="delete(element)">Decline</button>
+                </td>
+              </ng-container>
+            </div>
+          <!-- For Diaplaying table data-->
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Past Approved Insurances">
+    <div class="table1">
+      <mat-card>
+        <mat-card-header>
+          <mat-card-title>Approved Insurances</mat-card-title>
+        </mat-card-header>
+        <!-- Table Title -->
+        <mat-card-content>
+
+        <!-- Inserting the data source -->
+        <table mat-table [dataSource]="approvedTable">
+
+          <ng-container matColumnDef="BillID">
+            <th mat-header-cell *matHeaderCellDef> Bill Id. </th>
+            <td mat-cell *matCellDef="let element"> {{element.BillID}} </td>
+          </ng-container>
+
+          <!-- Position Column -->
+          <ng-container matColumnDef="Claim Amount">
+            <th mat-header-cell *matHeaderCellDef> Claim Amount </th>
+            <td mat-cell *matCellDef="let element"> {{element.ClaimedAmount}} </td>
+          </ng-container>
+
+          <!-- Name Column -->
+          <ng-container matColumnDef="Approve Amount">
+            <th mat-header-cell *matHeaderCellDef> Approval Amount </th>
+            <td mat-cell *matCellDef="let element"> {{element.ApproveAmount}} </td>
+          </ng-container>
+
+          <!-- Weight Column -->
+          <ng-container matColumnDef="Claim Request Date">
+            <th mat-header-cell *matHeaderCellDef>  Claim Request Date </th>
+            <td mat-cell *matCellDef="let element"> {{element.ClaimRequestDate}} </td>
+          </ng-container>
+
+          <ng-container matColumnDef="Approver">
+            <th mat-header-cell *matHeaderCellDef>  ApproverID </th>
+            <td mat-cell *matCellDef="let element"> {{element.ApproverId}} </td>
+          </ng-container>
+
+          <!-- For Diaplaying table data-->
+          <tr mat-header-row *matHeaderRowDef="approveColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: approveColumns;"></tr>
+        </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Policies">
+    <div class="grid-child1">
+      <mat-card>
+        <!-- Patient Title -->
+        <mat-card-header>
+          <mat-card-title>Past Policies</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <table mat-table [dataSource]="policiyTable">
+
+            <ng-container matColumnDef="policyID">
+              <th mat-header-cell *matHeaderCellDef> Policy ID </th>
+              <td mat-cell *matCellDef="let element"> {{element.policyID}} </td>
+            </ng-container>
+
+            <!-- Position Column -->
+            <ng-container matColumnDef="patientID">
+              <th mat-header-cell *matHeaderCellDef> Patient ID </th>
+              <td mat-cell *matCellDef="let element"> {{element.patientID}} </td>
+            </ng-container>
+
+            <!-- Name Column -->
+            <ng-container matColumnDef="policyDetails">
+              <th mat-header-cell *matHeaderCellDef> Policy Details </th>
+              <td mat-cell *matCellDef="let element"> {{element.policyDetails}} </td>
+            </ng-container>
+
+            <!-- Weight Column -->
+            <ng-container matColumnDef="amount">
+              <th mat-header-cell *matHeaderCellDef>  Amount </th>
+              <td mat-cell *matCellDef="let element"> {{element.amount}} </td>
+            </ng-container>
+
+            <!-- For Diaplaying table data-->
+            <tr mat-header-row *matHeaderRowDef="policyColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: policyColumns;"></tr>
+          </table>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Create Insurance Policy">
+    <div class="grid-child1">
+      <mat-card>
+        <!-- Patient Title -->
+        <mat-card-header>
+          <mat-card-title>Create Policies</mat-card-title>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="form">
+            <form [formGroup]="myForm" class="example-form" >
+              <table class="example-full-width" cellspacing="1">
+                <tr>
+                  <!-- FirstName Field -->
+                  <td>
+                      <mat-form-field class="example-full-width"  appearance="outline">
+                        <mat-label>Patient ID</mat-label>
+                        <input matInput formControlName="patient" id="patient" required >
+                        <mat-error *ngIf="myError('patient', 'required')">PatientId is required</mat-error>
+                        <mat-error *ngIf="myError('patient', 'maxlength')">Not more than 20 characters</mat-error>
+                        <mat-error *ngIf="myError('patient', 'pattern')">Numbers are not allowed</mat-error>
+                      </mat-form-field>
+                  <td>
+                </tr>
+              </table>
+              <table>
+                <tr>
+                  <!-- Age Field -->
+                  <td>
+                    <mat-form-field class="example-full-width"  appearance="outline">
+                      <mat-label>Policy Amount</mat-label>
+                      <input matInput formControlName="amount" id="amount" required>
+                      <mat-error *ngIf="myError('amount', 'required')">Number is required</mat-error>
+                      <mat-error *ngIf="myError('amount', 'pattern')">Alphabets are not allowed</mat-error>
+                    </mat-form-field>
+                  </td>
+              </table>
+              <table>
+                <tr>
+                  <td>
+                    <!-- Address1 Field -->
+                    <mat-form-field class="example-full-width"  appearance="outline">
+                      <mat-label>Policy Details</mat-label>
+                      <textarea matInput placeholder="Ex. checkup" formControlName="policyDetails" id="Address" required></textarea>
+                        <mat-error *ngIf="myError('policyDetails', 'required')">Policy Details is required</mat-error>
+                        <mat-error *ngIf="myError('policyDetails', 'maxlength')">Not more than 50 characters</mat-error>
+                    </mat-form-field>
+                  </td>
+                </tr>
+              </table>
+              <!-- Button for saving the patient data -->
+              <button mat-raised-button (click)= "save(myForm.value)"  color="primary" style="margin:10px" >Save</button>
+            </form>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </mat-tab>
+</mat-tab-group>
