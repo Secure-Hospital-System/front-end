@@ -54,6 +54,11 @@ export class DashboardComponent implements OnInit {
       icon: 'chat',
       redirectUrl: '/chat',
     },
+    {
+      title: 'InsuranceStaff',
+      icon: 'person_outline',
+      redirectUrl: '/insurancestaff'
+    }
   ];
 
   hospitalStaffDashboard = [

@@ -1,3 +1,4 @@
+import { InsurancestaffComponent } from './insurancestaff/insurancestaff.component';
 import { NgModule } from '@angular/core';
 import { Routes, RouterModule } from '@angular/router';
 import { AppointmentComponent } from './appointment/appointment.component';
@@ -60,6 +61,10 @@ const routes: Routes = [
   {
     path: 'records',
     component: UserComponent,
+  },
+  {
+    path: 'insurancestaff',
+    component: InsurancestaffComponent,
   },
 
   { path: 'home', component: HomeComponent },
