@@ -5,6 +5,7 @@ import {MatTableDataSource} from '@angular/material/table';
 import { ReportDialogComponent } from '../report-dialog/report-dialog.component';
 import { StateService } from '../services/state.service';
 import { TokenStorageService } from '../services/token-storage.service';
+import jsPDF from 'jspdf';
 
 export interface PeriodicElement {
   date: string;
@@ -88,6 +89,20 @@ export class ReportsComponent implements OnInit {
       };
     }
     this.dataSource.data =values
+  }
+
+  download(){
+    var data = [
+      {"firstName":"John", "lastName":"Doe"},
+      {"firstName":"Anna", "lastName":"Smith"},
+      {"firstName":"Peter", "lastName":"Jones"}
+    ];
+    var doc = new jsPDF();
+    data.forEach(function(employee:any, i:any){
+    doc.text("First Name: " + employee.firstName +
+    "Last Name: " + employee.lastName,20, 10 + (i * 10));
+});
+doc.save('Test.pdf');
   }
 
   create(){
