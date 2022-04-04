@@ -110,7 +110,7 @@ import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
     MakePaymentComponent,
     AdminRegistrationComponent,
     AllUsersComponent,
-    
+
   ],
   imports: [
     BrowserModule,

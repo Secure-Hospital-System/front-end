@@ -200,6 +200,9 @@
               </table>
               <!-- Button for saving the patient data -->
               <button mat-raised-button (click)= "save(myForm.value)"  color="primary" style="margin:10px" >Save</button>
+              <div *ngIf="validate">
+                Error the policy already there for the patient
+            </div>
             </form>
           </div>
         </mat-card-content>

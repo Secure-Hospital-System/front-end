@@ -18,6 +18,7 @@ export class InsurancestaffComponent implements OnInit {
   id = "1";
   @Input()
   diagnosisdata!: Object;
+  validate = false;
 
   //Column to be displayed for the table.
   public myForm!: FormGroup;
@@ -28,6 +29,7 @@ export class InsurancestaffComponent implements OnInit {
   dataSource = new MatTableDataSource(ELEMENT_DATA);
   approvedTable = new MatTableDataSource(APPROVE_DATA);
   policiyTable = new MatTableDataSource(POLICY_DATA);
+  patientData!: Number[];
 
 
   //Error Function for alerting error on incorrect input in the form
@@ -37,6 +39,7 @@ export class InsurancestaffComponent implements OnInit {
 
   //Assigning the paginatior for limiting the no. of rows.
   ngOnInit(){
+    this.patientData = [];
     //Column to be displayed for the table.
     this.displayedColumns = ["transactionID",'Claim Amount', 'Approve Amount', 'Claim Request Date', 'action'];
     this.approveColumns = ["transactionID",'Claim Amount', 'Approve Amount', 'Claim Request Date','Approver'];
@@ -89,8 +92,8 @@ export class InsurancestaffComponent implements OnInit {
 
     this.userService.fetchInsurancePolicy().subscribe((data:any)=>{
       var iData = this.policiyTable.data;
-
       for(var i = 0; i<data.length;i+=1){
+        this.patientData.push(data[i].patientID)
         var add = {
           "amount": data[i].amount,
           "policyID": data[i].policyID,
@@ -107,10 +110,14 @@ export class InsurancestaffComponent implements OnInit {
   }
 
   save(data:any){
-    console.log(data)
+    if (this.patientData.includes(parseInt(data.patient))){
+      this.validate = true;
+    }
+    else{
     this.userService.addInsurancePolicy(data.amount,data.patient,data.policyDetails).subscribe((data:any)=>{
       window.location.reload();
     })
+  }
   }
 
   edit(){
@@ -123,9 +130,7 @@ export class InsurancestaffComponent implements OnInit {
       const status = 'completed_transaction';
       this.stateService.updateTransaction(data.TransactionID, status).subscribe(
         (res) => {
-          console.log(res);
           this.userService.updateApprovedBills(data.TransactionID,confirm,this.tokenStorage.getUserID()).subscribe((data:any)=>{
-            console.log(data)
             window.location.reload();
           })
         },
@@ -150,7 +155,7 @@ export class InsurancestaffComponent implements OnInit {
       }
     );
 
-   
+
   }
 }
 
