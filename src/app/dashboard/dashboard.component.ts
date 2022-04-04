@@ -53,11 +53,6 @@ export class DashboardComponent implements OnInit {
       title: 'Chatbot',
       icon: 'chat',
       redirectUrl: '/chat',
-    },
-    {
-      title: 'InsuranceStaff',
-      icon: 'person_outline',
-      redirectUrl: '/insurancestaff'
     }
   ];
 
@@ -101,6 +96,88 @@ export class DashboardComponent implements OnInit {
 
   doctorDashBoard = [
     {
+      title: 'Appointments',
+      icon: 'local_hospital',
+      redirectUrl: '/appointments',
+    },
+    // {
+    //   title: 'Records',
+    //   icon: 'description',
+    //   redirectUrl: '/records',
+    // },
+    {
+      title: 'User Profile',
+      icon: 'person',
+      redirectUrl: '/patients',
+    },
+    {
+      title: 'Reports',
+      icon: 'description',
+      redirectUrl: '/reports',
+    },
+    // {
+    //   title: 'Diagnosis',
+    //   icon: 'storage',
+    //   redirectUrl: '/diagnosis',
+    // },
+    // {
+    //   title: 'Prescription',
+    //   icon: 'description',
+    //   redirectUrl: '/prescription',
+    // }
+  ];
+
+
+  labStaffDashBoard = [
+    {
+      title: 'Lab Requests',
+      icon: '',
+      redirectUrl: '/lab-request',
+    },
+    {
+      title: 'Reports',
+      icon: 'description',
+      redirectUrl: '/reports',
+    },
+    {
+      title: 'Diagnosis',
+      icon: 'storage',
+      redirectUrl: '/diagnosis',
+    }
+
+  ];
+
+  insuranceStaffDashBoard = [
+    {
+      title: 'InsuranceStaff',
+      icon: 'person_outline',
+      redirectUrl: '/insurancestaff'
+    }
+  ];
+
+  adminStaffDashboard = [
+    
+    {
+      title: 'Registration',
+      icon: 'person',
+      redirectUrl: '/admin-registration'
+    },
+    {
+      title: 'Profiles',
+      icon: 'person',
+      redirectUrl: '/all-users',
+    },
+    {
+      title: 'Pending Transactions',
+      icon: 'payment',
+      redirectUrl: '/payment',
+    },
+    {
+      title: 'Appointments',
+      icon: 'local_hospital',
+      redirectUrl: '/appointments',
+    },
+    {
       title: 'Records',
       icon: 'description',
       redirectUrl: '/records',
@@ -125,7 +202,8 @@ export class DashboardComponent implements OnInit {
       icon: 'description',
       redirectUrl: '/prescription',
     }
-  ];
+  ]
+
 
   constructor(private tokenStorageService: TokenStorageService) {}
 
@@ -136,6 +214,18 @@ export class DashboardComponent implements OnInit {
 
     if(this.tokenStorageService.getUser().roles && this.tokenStorageService.getUser().roles.includes('ROLE_HOSPITALSTAFF')){
       this.displayDashboard = this.hospitalStaffDashboard;
+    }
+
+    if(this.tokenStorageService.getUser().roles && this.tokenStorageService.getUser().roles.includes('ROLE_LABSTAFF')){
+      this.displayDashboard = this.labStaffDashBoard;
+    }
+
+    if(this.tokenStorageService.getUser().roles && this.tokenStorageService.getUser().roles.includes('ROLE_INSURANCESTAFF')){
+      this.displayDashboard = this.insuranceStaffDashBoard;
+    }
+
+    if(this.tokenStorageService.getUser().roles && this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN')){
+      this.displayDashboard = this.adminStaffDashboard;
     }
   }
 

@@ -16,12 +16,24 @@ import { ProfileComponent } from './profile/profile.component';
 import { BoardUserComponent } from './board-user/board-user.component';
 import { BoardModeratorComponent } from './board-moderator/board-moderator.component';
 import { BoardAdminComponent } from './board-admin/board-admin.component';
+import { LabRequestComponent } from './lab-request/lab-request.component';
+import { PayementDetailsComponent } from './payement-details/payement-details.component';
+import { AdminRegistrationComponent } from './admin-registration/admin-registration.component';
+import { AllUsersComponent } from './all-users/all-users.component';
 
 const routes: Routes = [
-  // {
-  //   path: '',
-  //   component: DashboardComponent,
-  // },
+  {
+    path:'all-users',
+    component: AllUsersComponent
+  },
+  {
+    path: 'admin-registration',
+    component: AdminRegistrationComponent,
+  },
+  {
+    path: 'payment-details',
+    component: PayementDetailsComponent,
+  },
   {
     path: 'dashbaord',
     component: DashboardComponent,
@@ -65,6 +77,10 @@ const routes: Routes = [
   {
     path: 'insurancestaff',
     component: InsurancestaffComponent,
+  },
+  {
+    path:'lab-request',
+    component: LabRequestComponent
   },
 
   { path: 'home', component: HomeComponent },

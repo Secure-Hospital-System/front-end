@@ -4,7 +4,7 @@ import { TokenStorageService } from '../services/token-storage.service';
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
+  styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
   form: any = {};
@@ -12,10 +12,13 @@ export class LoginComponent implements OnInit {
   isLoginFailed = false;
   isOTPSucess = false;
   email = '';
-  private tokenData:any;
+  private tokenData: any;
   errorMessage = '';
   roles: string[] = [];
-  constructor(private authService: AuthService, private tokenStorage: TokenStorageService) { }
+  constructor(
+    private authService: AuthService,
+    private tokenStorage: TokenStorageService
+  ) {}
   ngOnInit(): void {
     if (this.tokenStorage.getToken()) {
       this.isLoggedIn = true;
@@ -25,13 +28,13 @@ export class LoginComponent implements OnInit {
   }
   onSubmit(): void {
     this.authService.login(this.form).subscribe(
-      data => {
+      (data) => {
         this.tokenData = data;
         this.email = data.email;
         this.isLoginFailed = false;
         this.isLoggedIn = true;
       },
-      err => {
+      (err) => {
         this.errorMessage = err.error.message;
         this.isLoginFailed = true;
       }
@@ -41,25 +44,25 @@ export class LoginComponent implements OnInit {
     window.location.reload();
   }
 
-  auth2fCheck(status:any) {
-    if(status == true){
+  auth2fCheck(status: any) {
+    if (status == true) {
       this.isOTPSucess = status;
       this.authService.otpStatus = status;
-    }else {
+    } else {
       this.isOTPSucess = false;
       this.authService.otpStatus = false;
     }
-   
-    if(this.isOTPSucess){
+
+    if (this.isOTPSucess) {
       this.errorMessage = '';
       this.tokenStorage.saveToken(this.tokenData?.accessToken);
       this.tokenStorage.saveUser(this.tokenData);
       this.roles = this.tokenStorage.getUser().roles;
-      
+
       this.reloadPage();
-    }else {
+    } else {
       this.errorMessage = 'Invalid OTP';
     }
-    console.log('isOTPSucess:',status);
-}
+    console.log('isOTPSucess:', status);
+  }
 }

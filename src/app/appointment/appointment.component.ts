@@ -14,12 +14,12 @@ export class AppointmentComponent implements OnInit {
 
   @ViewChild(CreateAppointmentComponent) private createAppointmentComponent:any;
   @ViewChild(ViewAppointmentComponent) private viewAppointmentComponent:any;
-  isHospitalStaff=false;
+  showPendingAppointments=false;
   constructor(private tokenStorageService:TokenStorageService) {}
 
   ngOnInit(): void {
-    if(this.tokenStorageService.getUser().roles.includes('ROLE_HOSPITALSTAFF')){
-      this.isHospitalStaff = true;
+    if(this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN') || this.tokenStorageService.getUser().roles.includes('ROLE_HOSPITALSTAFF') || this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR')){
+      this.showPendingAppointments = true;
     }
   }
 

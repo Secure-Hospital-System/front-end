@@ -17,9 +17,9 @@ export class ChatService {
 
   sendMessage(textMessage: TextMessage){
     var reqBody = {
-      "projectId": environment.dialogflow.projectId,
+      "projectId": '',
       "requestText": textMessage.text
     }
-    return this.http.post(environment.backend.requestTextUrl, reqBody, this.httpOptions);
+    return this.http.post("", reqBody, this.httpOptions);
   }
 }

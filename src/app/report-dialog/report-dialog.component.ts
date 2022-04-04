@@ -26,13 +26,13 @@ export class ReportDialogComponent implements OnInit {
   @Output() datachange = new EventEmitter<Object>();
 
   ngOnInit(): void {
-    if (this.btnname=="Create"){
-      this.val = "primary"
-      this.sty = "{float:'right'}"
-    }
-    else{
-      this.val = "accent"
-    }
+    // if (this.btnname=="Create"){
+    //   this.val = "primary"
+    //   this.sty = "{float:'right'}"
+    // }
+    // else{
+    //   this.val = "accent"
+    // }
   }
 
   onclick(val:any){
@@ -79,25 +79,19 @@ export class ReportDialogComponent3 {
 
   public myForm! : FormGroup;
 
-  states: string[] = [
-    'Alabama',
-    'Alaska',
-    'Arizona',
-    'Arkansas',
-    'California',
-    'Colorado'
-  ];
-
   @Output() datachange = new EventEmitter<Object>();
 
   ngOnInit(): void {
     //Creating the myForm Data and validating each input field.
     this.myForm = new FormGroup({
-      FirstName: new FormControl('', [Validators.required, Validators.maxLength(20),Validators.pattern('^[a-zA-Z \-\']+')]),
-      Date: new FormControl('', [Validators.required]),
-      LabTest: new FormControl('', [Validators.required]),
+      status: new FormControl('', [Validators.required, Validators.maxLength(20),Validators.pattern('^[a-zA-Z \-\']+')]),
+      date: new FormControl('', [Validators.required]),
+      record: new FormControl('', [Validators.required]),
       });
-    this.myForm.setValue({FirstName:this.data.recommender, Date:new Date(this.data.dateFilled), LabTest:this.data.testName})
+    if(this.data.dateFilled){
+      this.data.dateFilled = new Date(this.data.dateFilled);
+    }
+    this.myForm.setValue({status:this.data.status, date:this.data.dateFilled, record:this.data.record})
   }
 
   onNoClick(): void {
@@ -124,7 +118,7 @@ export interface DialogData {
   address: string,
   age: number,
   creditCard: string,
-  dateFilled: string,
+  dateFilled: any,
   dateRecommended: string,
   gender: string,
   inputter: string,

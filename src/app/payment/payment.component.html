@@ -1,1 +1,20 @@
-<p>payment works!</p>
+<!-- <p>payment works!</p> -->
+
+<h4>Transactions</h4>
+
+<mat-tab-group (selectedTabChange)="onTabChanged($event)">
+  <mat-tab *ngIf="!isPatient && !isAdmin" label="{{tabName}}">
+    <app-create-transaction></app-create-transaction>
+  </mat-tab>
+  <mat-tab *ngIf="isPatient && !isAdmin" label="Make Payment">
+    <app-make-payment></app-make-payment>
+  </mat-tab>
+  <mat-tab label="{{tabName2}}">
+     <app-transactions></app-transactions>
+  </mat-tab>
+<mat-tab *ngIf="isPatient && !isAdmin" label="Bills">
+  <app-completed-bills></app-completed-bills>
+</mat-tab>
+
+</mat-tab-group>
+

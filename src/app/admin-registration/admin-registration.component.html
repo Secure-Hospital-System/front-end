@@ -1,0 +1,127 @@
+<!-- <input [(ngModel)]="test" [matKeyboard]="'Azərbaycanca'"> -->
+<div class="col-md-12">
+    <div class="card card-container" style="align-items: center">
+      <h4 *ngIf="!isSuccessful">Registration</h4>
+        <form
+        *ngIf="!isSuccessful"
+        name="form"
+        (ngSubmit)="onSubmit()"
+        #f="ngForm"
+        novalidate
+        style="width: 40%"
+      >
+        <div class="form-group">
+          <label for="username">Name</label>
+          <input
+            type="text"
+            class="form-control"
+            name="username"
+            [(ngModel)]="form.username"
+            required
+            minlength="3"
+            maxlength="20"
+            #username="ngModel"
+          />
+          <div class="alert-danger" *ngIf="f.submitted && username.invalid">
+            <div *ngIf="username.errors && username.errors.required">
+              Username is required
+            </div>
+            <div *ngIf="username.errors && username.errors.minlength">
+              Username must be at least 3 characters
+            </div>
+            <div *ngIf="username.errors && username.errors.maxlength">
+              Username must be at most 20 characters
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input
+            type="email"
+            class="form-control"
+            name="email"
+            [(ngModel)]="form.email"
+            required
+            email
+            #email="ngModel"
+          />
+          <div class="alert-danger" *ngIf="f.submitted && email.invalid">
+            <div *ngIf="email.errors && email.errors.required">
+              Email is required
+            </div>
+            <div *ngIf="email.errors && email.errors.email">
+              Email must be a valid email address
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            class="form-control"
+            name="password"
+            [(ngModel)]="form.password"
+            required
+            minlength="6"
+            #password="ngModel"
+          />
+          <div class="alert-danger" *ngIf="f.submitted && password.invalid">
+            <div *ngIf="password.errors && password.errors.required">
+              Password is required
+            </div>
+            <div *ngIf="password.errors && password.errors.minlength">
+              Password must be at least 6 characters
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-group">
+            <mat-label>Role</mat-label>
+            <mat-select type="text"
+            class="form-control"
+            name="role"
+            [(ngModel)]="form.role"
+            required
+            #role="ngModel">
+              <mat-option value="doctor">Doctor</mat-option>
+              <mat-option value="hospital_staff">Hospital Staff</mat-option>
+              <mat-option value="lab_staff">Lab Staff</mat-option>
+              <mat-option value="insurance_staff">Insurance Staff</mat-option>
+              <mat-option value="admin">Admin</mat-option>
+            </mat-select>
+          <!-- <label for="gender">Gender</label>
+          <input
+            type="text"
+            class="form-control"
+            name="gender"
+            [(ngModel)]="form.gender"
+            required
+            minlength="3"
+            maxlength="20"
+            #gender="ngModel"
+          /> -->
+          <div class="alert-danger" *ngIf="f.submitted">
+            <div *ngIf="role.errors && role.errors.required">
+                Eole is required
+            </div>
+          </div>
+        </div>
+  
+        <div class="form-group">
+          <button class="btn btn-primary btn-block">Sign Up</button>
+        </div>
+        <div class="alert alert-warning" *ngIf="f.submitted && isSignUpFailed">
+          Signup failed!<br />{{ errorMessage }}
+        </div>
+      </form>
+      <div *ngIf="isSuccessful && !isRegistrationSucess">
+          <app-auth2f-registration [email]="form.email" (authStatusEvent)='auth2fVerify($event)'></app-auth2f-registration>
+      </div>
+      <div class="alert alert-success" *ngIf="isRegistrationSucess">
+          Your registration is successful! You may now login.
+      </div>
+    </div>
+  </div>
+  
+  
+  

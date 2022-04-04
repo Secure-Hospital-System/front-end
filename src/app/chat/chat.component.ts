@@ -32,7 +32,7 @@ export class ChatComponent implements OnInit {
 
     this.messages.push(newMessage);
 
-    let messageBack: TextMessage = { "firstname": environment.firstName, "text": this.textInput}
+    let messageBack: TextMessage = { "firstname": "", "text": this.textInput}
     if(this.BACK_ENABLED){
       this.chatService.sendMessage(messageBack)
       .subscribe((res: ResponseMessage) => {

@@ -140,23 +140,22 @@
       </div>
 
       <div class="form-group">
-        <label for="gender">Gender</label>
-        <input
-          type="text"
-          class="form-control"
-          name="gender"
-          [(ngModel)]="form.gender"
-          required
-          minlength="3"
-          maxlength="20"
-          #gender="ngModel"
-        />
-        <div class="alert-danger" *ngIf="f.submitted">
-          <div *ngIf="gender.errors && gender.errors.required">
-            Gender is required
-          </div>
+        <mat-label>Gender</mat-label>
+        <mat-select type="text"
+        class="form-control"
+        name="gender"
+        [(ngModel)]="form.gender"
+        required
+        #gender="ngModel">
+          <mat-option value="Male">Male</mat-option>
+          <mat-option value="Female">Female</mat-option>
+        </mat-select>
+      <div class="alert-danger" *ngIf="f.submitted">
+        <div *ngIf="gender.errors && gender.errors.required">
+          Gender is required
         </div>
       </div>
+    </div>
 
 
       <div class="form-group">

@@ -18,7 +18,9 @@
               [(ngModel)]="form.otp"
               required
               #otp="ngModel"
+              [matKeyboard]="'English'"
             />
+            <!-- <input [(ngModel)]="form.otp" > -->
             <div
               class="alert alert-danger"
               role="alert"

@@ -78,7 +78,7 @@
   </div>
 
   <!-- Prescription Table  -->
-  <div class="table2">
+  <div *ngIf="!isLabStaff" class="table2">
     <mat-card>
       <mat-card-header>
         <!-- Table Title -->
@@ -159,13 +159,13 @@
   </div>
 
   <!-- Record Table  -->
-  <div class="table3">
+  <div *ngIf="!isLabStaff" class="table3">
     <mat-card>
       <mat-card-header>
         <!-- Table Title -->
         <mat-card-title>Record Details</mat-card-title>
 
-        <ng-template [ngIf]="show">
+        <ng-template [ngIf]="isHospitalStaff">
           <div>
             <app-recorddialog
               user="record"
@@ -200,7 +200,7 @@
           <!-- Weight Column -->
           <ng-container matColumnDef="DoctorId">
             <th mat-header-cell *matHeaderCellDef>Doctor</th>
-            <td mat-cell *matCellDef="let element">{{ element.DoctorId | docname}}</td>
+            <td mat-cell *matCellDef="let element">{{ element.InputterID }}</td>
           </ng-container>
 
           <!-- Symbol Column -->
@@ -215,11 +215,12 @@
               <app-recorddialog
                 user="record"
                 btnname="edit"
+                (datachange)= "addRecord($event)"
                 (click) = "edit2(element)" >
               </app-recorddialog>
-              <button mat-icon-button (click)="deleteRecord(element)">
+              <!-- <button mat-icon-button (click)="deleteRecord(element)">
                 <mat-icon>close</mat-icon>
-              </button>
+              </button> -->
             </td>
           </ng-container>
 

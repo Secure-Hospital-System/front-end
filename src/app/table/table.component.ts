@@ -26,9 +26,14 @@ export class TableComponent implements OnChanges {
     private tokenStorageService: TokenStorageService
   ) {}
   // @Input() user: string = 'patient';
+  isHospitalStaff = false;
+  isLabStaff = false;
   @Input() id: string = '1';
 
   show: boolean = false;
+  recordIndex = 0;
+  diagnosisIndex = 0;
+  prescriptionIndex = 0;
 
   //Column to be displayed for the table.
   displayedColumns!: string[];
@@ -58,36 +63,47 @@ export class TableComponent implements OnChanges {
     this.recordSource.data = [];
   }
 
-  sortData(val:any){
-    if(val){
-      val.sort( function(a:any, b:any) {
+  sortData(val: any) {
+    if (val) {
+      val.sort(function (a: any, b: any) {
         return a.Date < b.Date ? 1 : -1;
-     });
+      });
     }
     return val;
   }
 
   fetchData() {
     this.resetValues();
-    this.displayedColumns = this.tokenStorageService
-      .getUser()
-      .roles.includes('ROLE_DOCTOR')
-      ? ['Nos', 'Date', 'Diagnosis', 'DoctorId', 'PatientId', 'action']
-      : ['Nos', 'Date', 'Diagnosis', 'DoctorId', 'PatientId'];
-    this.displayedColumnsprescription = this.tokenStorageService
-      .getUser()
-      .roles.includes('ROLE_DOCTOR')
-      ? ['Nos', 'Date', 'Prescription', 'DoctorId', 'PatientId','action']
-      : ['Nos', 'Date', 'Prescription', 'DoctorId', 'PatientId'];
-    this.displayedColumnsRecord = this.tokenStorageService
-      .getUser()
-      .roles.includes('ROLE_DOCTOR')
-      ? ['Nos', 'Date', 'Record', 'DoctorId', 'PatientId', 'action']
-      : ['Nos', 'Date', 'Record', 'DoctorId', 'PatientId'];
+    this.displayedColumns =
+      this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR') ||
+      this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN')
+        ? ['Nos', 'Date', 'Diagnosis', 'DoctorId', 'PatientId', 'action']
+        : ['Nos', 'Date', 'Diagnosis', 'DoctorId', 'PatientId'];
+    this.displayedColumnsprescription =
+      this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR') ||
+      this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN')
+        ? ['Nos', 'Date', 'Prescription', 'DoctorId', 'PatientId']
+        : ['Nos', 'Date', 'Prescription', 'DoctorId', 'PatientId'];
+    this.displayedColumnsRecord =
+      this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR') ||
+      this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN')
+        ? ['Nos', 'Date', 'Record', 'DoctorId', 'PatientId', 'action']
+        : ['Nos', 'Date', 'Record', 'DoctorId', 'PatientId'];
 
-    this.show = this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR');
+    this.show =
+      this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR') ||
+      this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN');
+
+    this.isHospitalStaff = this.tokenStorageService
+      .getUser()
+      .roles.includes('ROLE_HOSPITALSTAFF');
+
+    this.isLabStaff = this.tokenStorageService
+      .getUser()
+      .roles.includes('ROLE_LABSTAFF');
+
     this.stateService.fetchUserDiagnosis(this.id).subscribe((data: any) => {
-      console.log(data)
+      console.log(data);
       var initialData = this.diagnosisSource.data;
       // var i = initialData.length;
       for (let i = 0; i < data.length; i++) {
@@ -97,11 +113,12 @@ export class TableComponent implements OnChanges {
           Diagnosis: data[i].diagnosis,
           DoctorId: data[i].doctorID,
           PatientId: data[i].patientID,
+          LabTest: '',
         };
         initialData.push(addDiagnosis);
       }
       this.diagnosisSource.data = initialData;
-      this.diagnosisSource.data = this.sortData(this.diagnosisSource.data);
+      // this.diagnosisSource.data = this.sortData(this.diagnosisSource.data);
     });
 
     this.stateService.fetchUserPrescription(this.id).subscribe((data: any) => {
@@ -118,7 +135,9 @@ export class TableComponent implements OnChanges {
         initialData.push(addData);
       }
       this.prescriptionSource.data = initialData;
-      this.prescriptionSource.data = this.sortData(this.prescriptionSource.data);
+      // this.prescriptionSource.data = this.sortData(
+      //   this.prescriptionSource.data
+      // );
     });
 
     this.stateService.viewPatientRecord(this.id).subscribe((data: any) => {
@@ -128,32 +147,35 @@ export class TableComponent implements OnChanges {
           Nos: i + 1,
           Date: data[i].date,
           Record: data[i].record,
-          DoctorId: data[i].inputter,
+          InputterID: data[i].inputter,
           PatientId: data[i].patientID,
+          RecordId: data[i].recordID,
         };
         initialData.push(addData);
       }
 
-
       this.recordSource.data = initialData;
-      this.recordSource.data = this.sortData(this.recordSource.data);
+      // this.recordSource.data = this.sortData(this.recordSource.data);
     });
   }
   edit(data: any) {
-    data['LabTest'] = ""
+    // data['LabTest'] = "";
+    this.diagnosisIndex = data.Nos - 1;
     this.dialog.openDialog(data, 'edit');
   }
 
   createDiagnosis() {
-    var data = { Date: '', Diagnosis: '', LabTest:'' };
+    var data = { Date: '', Diagnosis: '', LabTest: '' };
     this.dialog.openDialog(data, 'createDiagnosis');
   }
 
   edit1(data: any) {
+    this.prescriptionIndex = data.Nos - 1;
     this.dialog1.openDialog(data, 'edit');
   }
 
   edit2(data: any) {
+    this.recordIndex = data.Nos - 1;
     this.dialog2.openDialog(data, 'edit');
   }
 
@@ -167,22 +189,52 @@ export class TableComponent implements OnChanges {
     this.dialog2.openDialog(data, 'createDiagnosis');
   }
 
+  recommendLabTest(
+    patientID: any,
+    recommender: any,
+    dateRecommended: any,
+    testName: any,
+    status?: any
+  ) {
+    status = 'requested';
+    this.stateService
+      .recommendLabTest(
+        patientID,
+        recommender,
+        dateRecommended,
+        testName,
+        status
+      )
+      .subscribe();
+  }
   addDiagnosis(data: any) {
     var value = this.diagnosisSource.data;
     var l = value.length;
     if (data[1] == 'edit') {
       this.stateService
         .updatePatientDiagnosis(
-          value[l - 1].PatientId,
-          value[l - 1].DoctorId,
-          value[l - 1].Date,
+          this.id,
+          this.tokenStorageService.getUser().id,
+          value[this.diagnosisIndex].Date,
           data[0].Date,
           data[0].Diagnosis
         )
         .subscribe(
           (res) => {
-            value[data[2] - 1].Date = data[0].Date;
-            value[data[2] - 1].Diagnosis = data[0].Diagnosis;
+            if (
+              data[0].LabTest &&
+              data[0].LabTest != value[this.diagnosisIndex].LabTest
+            ) {
+              this.recommendLabTest(
+                this.id,
+                this.tokenStorageService.getUser().id,
+                data[0].Date,
+                data[0].LabTest
+              );
+            }
+            value[this.diagnosisIndex].Date = data[0].Date;
+            value[this.diagnosisIndex].Diagnosis = data[0].Diagnosis;
+            value[this.diagnosisIndex].LabTest = data[0].LabTest;
             this.diagnosisSource.data = value;
           },
           (error) => {
@@ -192,8 +244,8 @@ export class TableComponent implements OnChanges {
     } else {
       this.stateService
         .createPatientDiagnosis(
-          value[l - 1].PatientId,
-          value[l - 1].DoctorId,
+          this.id,
+          this.tokenStorageService.getUser().id,
           data[0].Date,
           data[0].Diagnosis
         )
@@ -203,9 +255,18 @@ export class TableComponent implements OnChanges {
               Nos: l + 1,
               Date: data[0].Date,
               Diagnosis: data[0].Diagnosis,
-              PatientId: value[l - 1].PatientId,
-              DoctorId: value[l - 1].DoctorId,
+              PatientId: this.id,
+              DoctorId: this.tokenStorageService.getUser().id,
+              LabTest: data[0].LabTest,
             });
+            if (data[0].LabTest) {
+              this.recommendLabTest(
+                this.id,
+                this.tokenStorageService.getUser().id,
+                data[0].Date,
+                data[0].LabTest
+              );
+            }
             this.diagnosisSource.data = value;
           },
           (error) => {
@@ -226,8 +287,8 @@ export class TableComponent implements OnChanges {
     } else {
       this.stateService
         .createPatientPrescription(
-          value[l - 1].PatientId,
-          value[l - 1].DoctorId,
+          this.id,
+          this.tokenStorageService.getUser().id,
           data[0].Date,
           data[0].Prescription
         )
@@ -237,8 +298,8 @@ export class TableComponent implements OnChanges {
               Nos: l + 1,
               Date: data[0].Date,
               Prescription: data[0].Prescription,
-              PatientId: value[l - 1].PatientId,
-              DoctorId: value[l - 1].DoctorId,
+              PatientId: this.id,
+              DoctorId: this.tokenStorageService.getUser().id,
             });
             this.prescriptionSource.data = value;
           },
@@ -250,20 +311,37 @@ export class TableComponent implements OnChanges {
   }
 
   addRecord(data: any) {
-    // console.log(data);
+    console.log(data);
     var value = this.recordSource.data;
     var l = value.length;
     if (data[1] == 'edit') {
-      value[data[2] - 1].Date = data[0].Date;
-      value[data[2] - 1].Record = data[0].Record;
-      this.recordSource.data = value;
+      this.stateService
+        .updatePatientRecord(
+          this.id,
+          data[0].Record,
+          data[0].Date,
+          value[0].RecordId,
+          value[0].InputterID
+        )
+        .subscribe(
+          (res) => {
+            value[data[2] - 1].Date = data[0].Date;
+            value[data[2] - 1].Record = data[0].Record;
+            this.recordSource.data = value;
+            // this.recordSource.data = this.sortData(this.recordSource.data);
+            console.log(res);
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
     } else {
       this.stateService
-        .createPatientPrescription(
-          value[l - 1].PatientId,
-          value[l - 1].DoctorId,
+        .createPatientRecord(
+          this.id,
+          data[0].Record,
           data[0].Date,
-          data[0].Record
+          this.tokenStorageService.getUser().id
         )
         .subscribe(
           (res) => {
@@ -271,10 +349,12 @@ export class TableComponent implements OnChanges {
               Nos: l + 1,
               Date: data[0].Date,
               Record: data[0].Record,
-              PatientId: value[l - 1].PatientId,
-              DoctorId: value[l - 1].DoctorId,
+              PatientId: this.id,
+              InputterID: this.tokenStorageService.getUser().id,
+              RecordId: this.tokenStorageService.getUser().id,
             });
             this.recordSource.data = value;
+            // this.recordSource.data = this.sortData(this.recordSource.data);
           },
           (error) => {
             console.log(error);
@@ -336,6 +416,7 @@ export interface Diagnosis {
   Diagnosis: string;
   DoctorId: string;
   PatientId: string;
+  LabTest: string;
 }
 
 export interface Prescription {
@@ -350,8 +431,9 @@ export interface Record {
   Nos: Number;
   Date: string;
   Record: string;
-  DoctorId: string;
+  InputterID: string;
   PatientId: string;
+  RecordId: Number;
 }
 
 //Creating dummy data for inserting in the tables.

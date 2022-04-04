@@ -8,6 +8,6 @@ export class DocNamePipe implements PipeTransform {
     }
     transform(doctorId:any): string {
         const doctor = this.stateService.doctors.find((x:any) => x.doctorID == doctorId);
-        return doctor.name;
+        return doctor ? doctor.name : doctorId ;
     }
   }

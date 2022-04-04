@@ -1,7 +1,14 @@
-import {AfterViewInit, Component, OnInit, Injectable, Input, ViewChild} from '@angular/core';
+import {
+  AfterViewInit,
+  Component,
+  OnInit,
+  Injectable,
+  Input,
+  ViewChild,
+} from '@angular/core';
 
 //Inserting the MatTable Paginator and MatTable DataSource Module
-import {MatTableDataSource} from '@angular/material/table';
+import { MatTableDataSource } from '@angular/material/table';
 import { ReportDialogComponent } from '../report-dialog/report-dialog.component';
 import { StateService } from '../services/state.service';
 import { TokenStorageService } from '../services/token-storage.service';
@@ -17,14 +24,21 @@ export interface PeriodicElement {
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.css']
+  styleUrls: ['./reports.component.css'],
 })
-
 export class ReportsComponent implements OnInit {
-  displayedColumns: string[] = ['date', 'doctor','testName','status','record','action'];
-  dataSource = new MatTableDataSource()
+  displayedColumns: string[] = [
+    'dateR',
+    'doctor',
+    'testName',
+    'status',
+    'record',
+    'download',
+  ];
+  dataSource: any;
   public hasAccess = false;
-  public id:any;
+  isLabStaff = false;
+  public id: any;
   storePatientId(id: string) {
     console.log(id);
     if (id) {
@@ -34,84 +48,170 @@ export class ReportsComponent implements OnInit {
 
   @ViewChild(ReportDialogComponent) dialog!: ReportDialogComponent;
 
-  constructor(private stateService: StateService, private tokenStorageService: TokenStorageService) { }
+  constructor(
+    private stateService: StateService,
+    private tokenStorageService: TokenStorageService
+  ) {}
 
   ngOnInit(): void {
-
-    if( this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR') || this.tokenStorageService.getUser().roles.includes('ROLE_HOSPITALSTAFF')){
-      this.hasAccess= true;
+    if (this.tokenStorageService.getUser().roles.includes('ROLE_LABSTAFF')) {
+      this.isLabStaff = true;
+      this.displayedColumns = [
+        'position',
+        'patient',
+        'dateR',
+        'doctor',
+        'testName',
+        'status',
+        'dateF',
+        'record',
+        'inputter',
+        'action',
+        'download',
+      ];
+      this.fetchAllPatientReports();
+    } else if (
+      this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR') ||
+      this.tokenStorageService.getUser().roles.includes('ROLE_HOSPITALSTAFF') ||
+      this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN')
+    ) {
+      this.hasAccess = true;
     } else {
       this.id = this.tokenStorageService.getPatientID();
       this.fetchPatientReport(this.id);
     }
-
   }
 
-  fetchPatientReport(id:any){
-    this.stateService.getPatientLabReport(id).subscribe(
-      res => {
+  fetchAllPatientReports() {
+    this.stateService.fetchAllLabTests().subscribe(
+      (res) => {
         console.log(res);
-        this.dataSource = res;
+        this.dataSource = res.filter(
+          (val: any) => val.status == 'approved' || val.status == 'completed'
+        );
       },
-      error => console.log(error)
-    )
-  }
-  delete(data:any){
-    var value = this.dataSource.data.filter(function(item) {
-      return item !== data
-    })
-    this.dataSource.data = value
+      (error) => console.log(error)
+    );
   }
 
-  edit(data:any){
-    console.log(data)
-    this.dialog.openDialog(data,"edit")
+  fetchPatientReport(id: any) {
+    this.stateService.getPatientLabReport(id).subscribe(
+      (res) => {
+        console.log(res);
+        this.dataSource = res.filter((val: any) => val.status == 'completed');
+      },
+      (error) => console.log(error)
+    );
   }
 
-  add(data:any){
-    var values = this.dataSource.data
-    if (data[1]=="create"){
-      var position = values.length+1
-      values.push({
-        "doctor":data[0].FirstName,
-        "report":data[0].LabTest,
-        "date":data[0].Date,
-        "position":position
-      })
+  delete(data: any, index: any) {
+    console.log(data);
+    this.stateService
+      .deleteLabReportData(
+        data.patientID,
+        data.recommender,
+        data.dateRecommended,
+        data.testName
+      )
+      .subscribe(
+        (res) => {
+          this.dataSource = this.dataSource.filter(
+            (val: any) =>
+              val.patientID != data.patientID ||
+              val.recommender != data.recommender ||
+              val.dateRecommended != data.dateRecommended ||
+              val.testName != data.testName
+          );
+        },
+        (error) => console.log(error)
+      );
+  }
+
+  edit(data: any, index: number) {
+    data.position = index;
+    console.log(data);
+    if (data.dateFilled) {
+      this.dialog.openDialog(data, 'edit');
+    } else {
+      this.dialog.openDialog(data, 'create');
     }
-    else if (data[1]=="edit"){
-      var curpos = data[2]-1
-      values[curpos]={
-        "doctor":data[0].FirstName,
-        "report":data[0].LabTest,
-        "date":data[0].Date,
-        "position":curpos
-      };
-    }
-    this.dataSource.data =values
   }
 
-  download(){
-    var data = [
-      {"firstName":"John", "lastName":"Doe"},
-      {"firstName":"Anna", "lastName":"Smith"},
-      {"firstName":"Peter", "lastName":"Jones"}
-    ];
+  add(data: any) {
+    console.log(data);
+    const index = data[2];
+    // var values = this.dataSource.data;
+    // console.log(values);
+    if (data[1] == 'create') {
+      this.stateService
+        .updateLabReportData(
+          this.dataSource[index].patientID,
+          this.dataSource[index].recommender,
+          this.dataSource[index].dateRecommended,
+          this.dataSource[index].testName,
+          data[0].status,
+          data[0].record,
+          this.tokenStorageService.getUser().id,
+          data[0].date
+        )
+        .subscribe(
+          (res) => {
+            this.dataSource[index].status = data[0].status;
+            this.dataSource[index].record = data[0].record;
+            this.dataSource[index].inputter =
+              this.tokenStorageService.getUser().id;
+            this.dataSource[index].dateFilled = data[0].date;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    } else if (data[1] == 'edit') {
+      this.stateService
+        .updateLabReportData(
+          this.dataSource[index].patientID,
+          this.dataSource[index].recommender,
+          this.dataSource[index].dateRecommended,
+          this.dataSource[index].testName,
+          data[0].status,
+          data[0].record,
+          this.tokenStorageService.getUser().id,
+          data[0].date
+        )
+        .subscribe(
+          (res) => {
+            this.dataSource[index].status = data[0].status;
+            this.dataSource[index].record = data[0].record;
+            this.dataSource[index].inputter =
+              this.tokenStorageService.getUser().id;
+            this.dataSource[index].dateFilled = data[0].date;
+          },
+          (error) => {
+            console.log(error);
+          }
+        );
+    }
+    // this.dataSource.data =values
+  }
+
+  download(val?: any) {
+    console.log(val);
+    let doctor = this.stateService.doctors.find(
+      (x: any) => x.doctorID == val.recommender
+    );
+    doctor = doctor ? doctor.name : val.recommender;
     var doc = new jsPDF();
-    data.forEach(function(employee:any, i:any){
-    doc.text("First Name: " + employee.firstName +
-    "Last Name: " + employee.lastName,20, 10 + (i * 10));
-});
-doc.save('Test.pdf');
+    doc.text('Report', 50, 10);
+    doc.text('Patient: ' + val.patientID, 20, 3 * 10);
+    doc.text('Date: ' + val.dateFilled, 20, 4 * 10);
+    doc.text('Doctor: ' + doctor, 20, 5 * 10);
+    doc.text('Test: ' + val.testName, 20, 6 * 10);
+    doc.text('Record: ' + val.record, 20, 7 * 10);
+    doc.save('Record_' + val.patientID + '.pdf');
   }
 
-  create(){
-    var data = {"doctor":"",
-        "report":"",
-        "date":"",
-        "position":""}
-    this.dialog.openDialog(data,"create")
-
+  create() {
+    var data = { doctor: '', report: '', date: '', position: '' };
+    this.dialog.openDialog(data, 'create');
   }
-
 }

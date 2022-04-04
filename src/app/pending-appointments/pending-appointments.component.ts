@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import {Router} from '@angular/router';
 
 import { StateService } from '../services/state.service';
 import { TokenStorageService } from '../services/token-storage.service';
@@ -14,11 +15,15 @@ export class PendingAppointmentsComponent implements OnInit {
   hospitalStaffId: any;
   constructor(
     private stateService: StateService,
-    private tokenStorageService: TokenStorageService
+    private tokenStorageService: TokenStorageService,
+    private route:Router
   ) { }
 
   ngOnInit(): void {
     this.hospitalStaffId = this.tokenStorageService.getUserID();
+    if(this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR') || this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN')){
+      this.displayedColumns = ['position','patient','date', 'time', 'doctor', 'status','userprofile'];
+    }
     this.refresh();
   }
 
@@ -36,7 +41,14 @@ export class PendingAppointmentsComponent implements OnInit {
     this.appointmentData = null;
     this.stateService.viewAllAppointments().subscribe(
       (response) => {
-        this.appointmentData = response;
+        if(this.tokenStorageService.getUser().roles.includes('ROLE_HOSPITALSTAFF')){
+          this.appointmentData = response.filter((val:any)=> val.status == "requested");
+        }else if (this.tokenStorageService.getUser().roles.includes('ROLE_DOCTOR')){
+          this.appointmentData = response.filter((val:any)=> val.status == "approved");
+        }else if(this.tokenStorageService.getUser().roles.includes('ROLE_ADMIN')){
+          this.appointmentData = response;
+        }
+        
         this.sortData();
         console.log(response);
       },
@@ -99,5 +111,11 @@ export class PendingAppointmentsComponent implements OnInit {
       );
     console.log(val);
   }
-  updateRow(val: any) { }
+
+
+  redirectToUserProfile(val: any) {
+    console.log(val);
+    this.stateService.appointmentDetais = val;
+    this.route.navigate(['/patients']);
+   }
 }

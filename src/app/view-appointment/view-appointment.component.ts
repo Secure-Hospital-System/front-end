@@ -40,7 +40,7 @@ export class ViewAppointmentComponent implements OnInit {
     this.appointmentData = null;
     this.stateService.viewPatientAppointment(this.id).subscribe(
       (response) => {
-        this.appointmentData = response;
+        this.appointmentData = response.filter((val:any) => val.status == "approved" || val.status == "requested" || val.status == "denied");
         this.sortData();
         console.log(response);
       },

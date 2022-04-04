@@ -52,6 +52,16 @@ import { Auth2fRegistrationComponent } from './auth2f-registration/auth2f-regist
 import { DocNamePipe } from './doc-name.pipe';
 import { PendingAppointmentsComponent } from './pending-appointments/pending-appointments.component';
 import { RecorddialogComponent } from './recorddialog/recorddialog.component';
+import { LabRequestComponent } from './lab-request/lab-request.component';
+import { CreateTransactionComponent } from './create-transaction/create-transaction.component';
+import { PayementDetailsComponent } from './payement-details/payement-details.component';
+import { TransactionsComponent } from './transactions/transactions.component';
+import { CompletedBillsComponent } from './completed-bills/completed-bills.component';
+import { MakePaymentComponent } from './make-payment/make-payment.component';
+import { AdminRegistrationComponent } from './admin-registration/admin-registration.component';
+import { AllUsersComponent } from './all-users/all-users.component';
+
+import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
 
 @NgModule({
   declarations: [
@@ -91,7 +101,16 @@ import { RecorddialogComponent } from './recorddialog/recorddialog.component';
     Auth2fRegistrationComponent,
     DocNamePipe,
     PendingAppointmentsComponent,
-    RecorddialogComponent
+    RecorddialogComponent,
+    LabRequestComponent,
+    CreateTransactionComponent,
+    PayementDetailsComponent,
+    TransactionsComponent,
+    CompletedBillsComponent,
+    MakePaymentComponent,
+    AdminRegistrationComponent,
+    AllUsersComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -105,7 +124,9 @@ import { RecorddialogComponent } from './recorddialog/recorddialog.component';
     HttpClientModule,
     MatIconModule,
     AppRoutingModule,
-    CommonModule
+    CommonModule,
+    MatKeyboardModule,
+
   ],
   // exports: [MaterialModule],
   providers: [ChatService,authInterceptorProviders],

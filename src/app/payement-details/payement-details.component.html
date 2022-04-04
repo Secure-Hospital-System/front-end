@@ -1,0 +1,65 @@
+
+<div *ngIf="!paymentCompleted" fxLayout="column" fxLayoutAlign="space-around start">
+    <h5>MAKE PAYMENT</h5>
+  <diV>
+    <mat-label style="margin-right: 20px">Patient Name: </mat-label>
+    <mat-form-field class="example-form-field" appearance="fill">
+      <input matInput required type="text" [(ngModel)]="patientName" />
+    </mat-form-field>
+  </diV>
+  <diV>
+    <mat-label style="margin-right: 50px">Patient ID:</mat-label>
+    <mat-form-field class="example-form-field" appearance="fill">
+      <input matInput required type="text" [(ngModel)]="patientName" />
+    </mat-form-field>
+  </diV>
+  <diV>
+    <mat-label style="">Amount to be Paid:</mat-label>
+    <mat-form-field class="example-form-field" appearance="fill">
+      <input matInput required type="text" [(ngModel)]="amount" />
+    </mat-form-field>
+  </diV>
+  <div>
+    <label id="example-radio-group-label">Pick your payment method</label>
+    <mat-radio-group
+      aria-labelledby="example-radio-group-label"
+      class="example-radio-group"
+      [(ngModel)]="paymentMethod"
+      (change)="handleChange($event)"
+    >
+      <mat-radio-button class="example-radio-button" [value]="'cash'">
+        Cash
+      </mat-radio-button>
+      <mat-radio-button class="example-radio-button" [value]="'card'">
+        Card
+      </mat-radio-button>
+      <mat-radio-button class="example-radio-button" [value]="'insurance'">
+        Insurance
+      </mat-radio-button>
+    </mat-radio-group>
+
+    <diV *ngIf="paymentMethod">
+      <mat-label style="margin-right: 50px">Enter Amount to be Paid</mat-label>
+      <mat-form-field class="example-form-field" appearance="fill">
+        <input matInput required type="text" [(ngModel)]="amountToBePaid" />
+      </mat-form-field>
+    </diV>
+
+    <diV *ngIf="paymentMethod=='card'">
+        <mat-label style="margin-right: 40px">Enter Credit Card Number</mat-label>
+        <mat-form-field class="example-form-field" appearance="fill">
+          <input matInput required type="text" [(ngModel)]="creditCardNumber" />
+        </mat-form-field>
+        <app-auth2f [email]="email" (authStatusEvent)="auth2fCheck($event)"></app-auth2f>
+        <div *ngIf="!twoFactorStatus">
+                Invalid OTP
+        </div>
+      </diV>
+
+    <button mat-raised-button color="primary" (click)="onSubmit()" [disabled]="disableButton" >Submit</button>
+  </div>
+</div>
+
+<div *ngIf="paymentCompleted" fxLayout="row" fxLayoutAlign="center center">
+    <h5>Payment has been completed. Thank You _/\_  </h5>
+</div>

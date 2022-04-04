@@ -5,6 +5,8 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 import {MatTableDataSource} from '@angular/material/table';
 import { UserService } from '../services/user.service';
+import { TokenStorageService } from '../services/token-storage.service';
+import { StateService } from '../services/state.service';
 @Component({
   selector: 'app-insurancestaff',
   templateUrl: './insurancestaff.component.html',
@@ -12,7 +14,7 @@ import { UserService } from '../services/user.service';
 })
 export class InsurancestaffComponent implements OnInit {
 
-  constructor(private stateService: UserService, public dialog: MatDialog) { }
+  constructor(private userService: UserService, public dialog: MatDialog,private tokenStorage: TokenStorageService,private stateService:StateService) { }
   id = "1";
   @Input()
   diagnosisdata!: Object;
@@ -36,9 +38,9 @@ export class InsurancestaffComponent implements OnInit {
   //Assigning the paginatior for limiting the no. of rows.
   ngOnInit(){
     //Column to be displayed for the table.
-    this.displayedColumns = ["BillID",'Claim Amount', 'Approve Amount', 'Claim Request Date', 'action'];
-    this.approveColumns = ["BillID",'Claim Amount', 'Approve Amount', 'Claim Request Date','Approver'];
-    this.policyColumns = ["amount",'policyDetails', 'patientID', 'policyID'];
+    this.displayedColumns = ["transactionID",'Claim Amount', 'Approve Amount', 'Claim Request Date', 'action'];
+    this.approveColumns = ["transactionID",'Claim Amount', 'Approve Amount', 'Claim Request Date','Approver'];
+    this.policyColumns = ['policyID','patientID',"amount",'policyDetails' ];
 
     this.myForm = new FormGroup({
       patient: new FormControl('', [
@@ -55,11 +57,11 @@ export class InsurancestaffComponent implements OnInit {
       ])
     });
 
-    this.stateService.fetchPendingBills().subscribe((data: any) => {
+    this.userService.fetchPendingBills().subscribe((data: any) => {
       var initialData = this.dataSource.data;
       for(var i = 0; i<data.length;i+=1){
         var add = {
-          "BillID": data[i].billID.toString(),
+          "TransactionID": data[i].transactionID.toString(),
           "ClaimedAmount": data[i].claimedAmount,
           "ApproveAmount": data[i].approvedAmount,
           "ClaimRequestDate": data[i].dateOfRequest,
@@ -69,11 +71,11 @@ export class InsurancestaffComponent implements OnInit {
       this.dataSource.data = initialData;
     });
 
-    this.stateService.fetchApprovedBills().subscribe((data: any) => {
+    this.userService.fetchApprovedBills().subscribe((data: any) => {
       var iData = this.approvedTable.data;
       for(var i = 0; i<data.length;i+=1){
         var add = {
-          "BillID": data[i].billID,
+          "TransactionID": data[i].transactionID,
           "ClaimedAmount": data[i].claimedAmount,
           "ApproveAmount": data[i].approvedAmount,
           "ClaimRequestDate": data[i].dateOfRequest,
@@ -84,7 +86,8 @@ export class InsurancestaffComponent implements OnInit {
       this.approvedTable.data = iData;
     });
 
-    this.stateService.fetchInsurancePolicy().subscribe((data:any)=>{
+
+    this.userService.fetchInsurancePolicy().subscribe((data:any)=>{
       var iData = this.policiyTable.data;
 
       for(var i = 0; i<data.length;i+=1){
@@ -105,7 +108,7 @@ export class InsurancestaffComponent implements OnInit {
 
   save(data:any){
     console.log(data)
-    this.stateService.addInsurancePolicy(data.amount,data.patient,data.policyDetails).subscribe((data:any)=>{
+    this.userService.addInsurancePolicy(data.amount,data.patient,data.policyDetails).subscribe((data:any)=>{
       window.location.reload();
     })
   }
@@ -115,31 +118,52 @@ export class InsurancestaffComponent implements OnInit {
   }
 
   add(data:any){
+
     this.dialog.open(ConfirmDialogComponent).afterClosed().subscribe(confirm => {
-    this.stateService.updateApprovedBills(data.BillID,confirm,8).subscribe((data:any)=>{
-      console.log(data)
-      window.location.reload();
-    })
+      const status = 'completed_transaction';
+      this.stateService.updateTransaction(data.TransactionID, status).subscribe(
+        (res) => {
+          console.log(res);
+          this.userService.updateApprovedBills(data.TransactionID,confirm,this.tokenStorage.getUserID()).subscribe((data:any)=>{
+            console.log(data)
+            window.location.reload();
+          })
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
+
   });
   }
 
   delete(data:any){
-    this.stateService.updateApprovedBills(data.BillID,0,8).subscribe((data:any)=>{
-      window.location.reload();
-    })
+    const status = 'denied';
+    this.stateService.updateTransaction(data.TransactionID, status).subscribe(
+      (res) => {
+        this.userService.updateApprovedBills(data.TransactionID,0,this.tokenStorage.getUserID()).subscribe((data:any)=>{
+          window.location.reload();
+        })
+      },
+      (error) => {
+        console.log(error);
+      }
+    );
+
+   
   }
 }
 
 //Creating the Table Element interface for table data type
 export interface Diagnosis {
-  BillID: String;
+  TransactionID: String;
   ClaimedAmount: string;
   ApproveAmount: string;
   ClaimRequestDate: string;
 }
 
 export interface Approve {
-  BillID: String;
+  TransactionID: String;
   ClaimedAmount: string;
   ApproveAmount: string;
   ClaimRequestDate: string;

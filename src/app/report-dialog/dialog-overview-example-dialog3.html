@@ -2,26 +2,26 @@
     <form [formGroup]="myForm" class="example-form" >
       <table class="example-full-width" cellspacing="1">
         <tr>
-          <!-- FirstName Field -->
+          <!-- status Field -->
           <td>
               <mat-form-field class="example-full-width"  appearance="outline" >
-                <mat-label>Doctor name</mat-label>
-                <input matInput formControlName="FirstName" id="FirstName"  required>
-                <mat-error *ngIf="myError('FirstName', 'required')">Name is required</mat-error>
-                <mat-error *ngIf="myError('FirstName', 'maxlength')">Not more than 20 characters</mat-error>
-                <mat-error *ngIf="myError('FirstName', 'pattern')">Numbers are not allowed</mat-error>
+                <mat-label>Status</mat-label>
+                <input matInput formControlName="status" id="status"  required>
+                <mat-error *ngIf="myError('status', 'required')">Status is required</mat-error>
+                <mat-error *ngIf="myError('status', 'maxlength')">Not more than 20 characters</mat-error>
+                <mat-error *ngIf="myError('status', 'pattern')">Numbers are not allowed</mat-error>
               </mat-form-field>
           <td>
         </tr>
       </table>
       <table class="example-full-width">
         <tr>
-          <!-- Date of Birth Field -->
+          <!-- date of Birth Field -->
           <td>
             <mat-form-field class="example-full-width"  appearance="outline">
-              <mat-label>Date</mat-label>
-                <input matInput [matDatepicker]="picker" formControlName="Date" id="Date" required>
-                  <mat-error *ngIf="myError('Date', 'required')">Date is required</mat-error>
+              <mat-label>Date Completed</mat-label>
+                <input matInput [matDatepicker]="picker" formControlName="date" id="date" required>
+                  <mat-error *ngIf="myError('date', 'required')">date is required</mat-error>
                   <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
                   <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
@@ -32,9 +32,9 @@
         <tr>
           <td>
             <mat-form-field class="example-full-width" appearance="fill">
-              <mat-label>Report</mat-label>
-                <input matInput formControlName="LabTest" id="LabTest" required>
-                <mat-error *ngIf="myError('LabTest', 'required')">Report is required</mat-error>
+              <mat-label>Record</mat-label>
+                <input matInput formControlName="record" id="record" required>
+                <mat-error *ngIf="myError('record', 'required')">record is required</mat-error>
             </mat-form-field>
           </td>
         </tr>

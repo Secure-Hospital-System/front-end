@@ -37,12 +37,12 @@ export class AuthService {
         username: user.email,
         email: user.email,
         password: user.password,
-        address: user.address,
-        phoneNumber: user.number,
-        age: user.age,
-        gender: user.gender,
-        creditCard: user.cardNumber,
-        role: ['patient'],
+        address: user.address ? user.address : 'NA',
+        phoneNumber: user.number ? user.number : 123423,
+        age: user.number ? user.age : 50,
+        gender: user.gender ? user.gender : 'Male',
+        creditCard: user.cardNumber ? user.cardNumber : 1234567890,
+        role: user.role ? [''+user.role] : ['patient']
       },
       httpOptions
     );

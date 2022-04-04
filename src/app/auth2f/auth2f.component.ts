@@ -3,6 +3,7 @@ import { AuthService } from '../services/auth.service';
 import { Input, Output, EventEmitter } from '@angular/core';
 import { TokenStorageService } from '../services/token-storage.service';
 
+
 @Component({
   selector: 'app-auth2f',
   templateUrl: './auth2f.component.html',
@@ -15,9 +16,11 @@ export class Auth2fComponent implements OnInit {
   isLoginFailed = false;
   errorMessage = '';
   currentUser: any;
+
   @Output() authStatusEvent = new EventEmitter<string>();
   constructor(private authService: AuthService,private token: TokenStorageService) { }
 
+  
   ngOnInit(): void {
     // this.currentUser = this.token.getUser();
   }
