@@ -32,7 +32,6 @@ export class UserService {
   }
 
   updateApprovedBills(bill?:string,amount?:number,approver?:number): Observable<any> {
-    console.log('http://18.233.8.27:8080/api/insurance/query5/'+bill+'/'+approver+'/'+amount)
     return this.http.get('http://18.233.8.27:8080/api/insurance/query5/'+bill+'/'+approver+'/'+amount).pipe(
       map((data: any) => {
         return data;
@@ -58,6 +57,22 @@ export class UserService {
 
   addInsurancePolicy(amount?:string,patientID?:string,policyDetails?:string): Observable<any> {
     return this.http.get('http://18.233.8.27:8080/api/insurance/policy/create/'+patientID+'/'+amount+'/'+policyDetails).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+  fetchPatientInsurancePolicy(patientId?:string): Observable<any> {
+    return this.http.get('http://18.233.8.27:8080/api/insurance/policy/view/'+patientId).pipe(
+      map((data: any) => {
+        return data;
+      })
+    );
+  }
+
+  fetchPatientInsuranceClaims(patientId?:string): Observable<any> {
+    return this.http.get('http://18.233.8.27:8080/api/insurance/query3/'+patientId).pipe(
       map((data: any) => {
         return data;
       })
