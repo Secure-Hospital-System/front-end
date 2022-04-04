@@ -4,9 +4,9 @@ import { Observable, of } from 'rxjs';
 import { map, mergeMap } from 'rxjs/operators';
 import { TokenStorageService } from './token-storage.service';
 const SERVER_API =
-  'http://ec2-54-235-234-187.compute-1.amazonaws.com:8080';
+  // 'http://ec2-54-235-234-187.compute-1.amazonaws.com:8080';
   // 'http://localhost:4000';
-  // 'http://ec2-18-212-236-103.compute-1.amazonaws.com:4000';
+  'http://ec2-18-212-236-103.compute-1.amazonaws.com:4000';
 // const
 const httpOptions = {
   headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
