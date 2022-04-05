@@ -1,22 +1,22 @@
 
 <div *ngIf="!paymentCompleted" fxLayout="column" fxLayoutAlign="space-around start">
     <h5>MAKE PAYMENT</h5>
-  <diV>
+  <!-- <diV>
     <mat-label style="margin-right: 20px">Patient Name: </mat-label>
     <mat-form-field class="example-form-field" appearance="fill">
       <input matInput required type="text" [(ngModel)]="patientName" />
     </mat-form-field>
-  </diV>
+  </diV> -->
   <diV>
     <mat-label style="margin-right: 50px">Patient ID:</mat-label>
     <mat-form-field class="example-form-field" appearance="fill">
-      <input matInput required type="text" [(ngModel)]="patientName" />
+      <input matInput required type="text" disabled [(ngModel)]="patientName" />
     </mat-form-field>
   </diV>
   <diV>
     <mat-label style="">Amount to be Paid:</mat-label>
     <mat-form-field class="example-form-field" appearance="fill">
-      <input matInput required type="text" [(ngModel)]="amount" />
+      <input matInput required type="text" disabled [(ngModel)]="amount" />
     </mat-form-field>
   </diV>
   <div>
@@ -38,12 +38,12 @@
       </mat-radio-button>
     </mat-radio-group>
 
-    <diV *ngIf="paymentMethod">
+    <!-- <diV *ngIf="paymentMethod">
       <mat-label style="margin-right: 50px">Enter Amount to be Paid</mat-label>
       <mat-form-field class="example-form-field" appearance="fill">
         <input matInput required type="text" [(ngModel)]="amountToBePaid" />
       </mat-form-field>
-    </diV>
+    </diV> -->
 
     <diV *ngIf="paymentMethod=='card'">
         <mat-label style="margin-right: 40px">Enter Credit Card Number</mat-label>

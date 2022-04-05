@@ -56,13 +56,12 @@ export class PayementDetailsComponent implements OnInit {
   }
 
   onComplete() {
-    const remainingAmount = this.amount - this.amountToBePaid;
     const data = this.stateService.transactionDetails;
     let status = data.status;
-    if (remainingAmount == 0) {
-      status = 'completed_transaction';
-    }
-
+    // if (remainingAmount == 0) {
+    //   status = 'completed_transaction';
+    // }
+    status = 'completed_transaction';
     this.stateService.updateTransaction(data.transactionID, status).subscribe(
       (res) => {
         this.paymentCompleted = true;
@@ -75,15 +74,34 @@ export class PayementDetailsComponent implements OnInit {
   }
 
   requestToInsurnace() {
-    this.stateService.patientInsuranceClaim(this.stateService.transactionDetails.transactionID,new Date(),this.amountToBePaid).subscribe(
-      res =>{
-        this.paymentCompleted = true;
-        console.log(res);
-      },
-      error => {
-        console.log(error);
-      }
-    );
-
+    const status = 'insurance_transaction';
+    this.stateService
+      .updateTransaction(
+        this.stateService.transactionDetails.transactionID,
+        status
+      )
+      .subscribe(
+        (res) => {
+          console.log(res);
+          this.stateService
+            .patientInsuranceClaim(
+              this.stateService.transactionDetails.transactionID,
+              new Date(),
+              this.amountToBePaid
+            )
+            .subscribe(
+              (res) => {
+                this.paymentCompleted = true;
+                console.log(res);
+              },
+              (error) => {
+                console.log(error);
+              }
+            );
+        },
+        (error) => {
+          console.log(error);
+        }
+      );
   }
 }

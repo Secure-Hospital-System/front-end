@@ -12,7 +12,10 @@ export const environment = {
     baseUrl: "http://localhost:4000/",
     apiUrl: "http://localhost:4000/api/",
     requestTextUrl: "http://localhost:4000/api/requestText/"
-  }
+  },
+  recaptcha: {
+    siteKey: '6LfKNi0cAAAAACeYwFRY9_d_qjGhpiwYUo5gNW5-',
+  },
 };
 
 /*

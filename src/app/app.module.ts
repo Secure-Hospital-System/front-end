@@ -8,13 +8,13 @@ import { DashboardComponent } from './dashboard/dashboard.component';
 import { MaterialModule } from './material/material.module';
 import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import {MatIconModule} from '@angular/material/icon'
+import { MatIconModule } from '@angular/material/icon';
 
-import {MatButtonModule} from '@angular/material/button';
+import { MatButtonModule } from '@angular/material/button';
 import { AppointmentComponent } from './appointment/appointment.component';
 import { ToolbarComponent } from './toolbar/toolbar.component';
-import {MatNativeDateModule} from '@angular/material/core';
-import {HttpClientModule} from '@angular/common/http';
+import { MatNativeDateModule } from '@angular/material/core';
+import { HttpClientModule } from '@angular/common/http';
 import { CreateAppointmentComponent } from './create-appointment/create-appointment.component';
 import { ViewAppointmentComponent } from './view-appointment/view-appointment.component';
 import { ReportsComponent } from './reports/reports.component';
@@ -62,6 +62,14 @@ import { AdminRegistrationComponent } from './admin-registration/admin-registrat
 import { AllUsersComponent } from './all-users/all-users.component';
 
 import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
+import {
+  RECAPTCHA_SETTINGS,
+  RecaptchaFormsModule,
+  RecaptchaModule,
+  RecaptchaSettings,
+} from 'ng-recaptcha';
+
+import { environment } from '../environments/environment';
 
 @NgModule({
   declarations: [
@@ -126,10 +134,20 @@ import { MatKeyboardModule } from 'angular-onscreen-material-keyboard';
     AppRoutingModule,
     CommonModule,
     MatKeyboardModule,
-
+    RecaptchaModule,
+    RecaptchaFormsModule,
   ],
   // exports: [MaterialModule],
-  providers: [ChatService,authInterceptorProviders],
-  bootstrap: [AppComponent]
+  providers: [
+    ChatService,
+    authInterceptorProviders,
+    {
+      provide: RECAPTCHA_SETTINGS,
+      useValue: {
+        siteKey: environment.recaptcha.siteKey,
+      } as RecaptchaSettings,
+    },
+  ],
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

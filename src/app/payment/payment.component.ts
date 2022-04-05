@@ -1,6 +1,10 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatTabChangeEvent } from '@angular/material/tabs';
+import { CompletedBillsComponent } from '../completed-bills/completed-bills.component';
+import { CreateTransactionComponent } from '../create-transaction/create-transaction.component';
+import { MakePaymentComponent } from '../make-payment/make-payment.component';
 import { TokenStorageService } from '../services/token-storage.service';
+import { TransactionsComponent } from '../transactions/transactions.component';
 
 @Component({
   selector: 'app-payment',
@@ -8,6 +12,11 @@ import { TokenStorageService } from '../services/token-storage.service';
   styleUrls: ['./payment.component.css']
 })
 export class PaymentComponent implements OnInit {
+
+  @ViewChild(CreateTransactionComponent) private createTransactionComponent:any;
+  @ViewChild(MakePaymentComponent) private makePaymentComponent:any;
+  @ViewChild(TransactionsComponent) private transactionsComponent:any;
+  @ViewChild(CompletedBillsComponent) private completedBillsComponent:any;
 
   constructor(private token:TokenStorageService) { }
   tabName = 'Transaction';
@@ -32,6 +41,12 @@ export class PaymentComponent implements OnInit {
 
   onTabChanged(event: MatTabChangeEvent) 
   {
+    console.log(event.index);
+    this.createTransactionComponent.refresh();
+    this.makePaymentComponent.refresh();
+    this.transactionsComponent.refresh();
+    this.completedBillsComponent.refresh();
+
     if(event.index == 0)
     {
         // this.createAppointmentComponent.refresh();//Or whatever name the method is called

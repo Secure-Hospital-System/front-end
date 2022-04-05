@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import jsPDF from 'jspdf';
 
 import { StateService } from '../services/state.service';
 import { TokenStorageService } from '../services/token-storage.service';
@@ -17,7 +18,8 @@ export class CompletedBillsComponent implements OnInit {
     'date',
     'service',
     'status',
-    'amount'
+    'amount',
+    'download'
   ];
   billData: any;
   id: any;
@@ -51,5 +53,15 @@ export class CompletedBillsComponent implements OnInit {
       },
       (error) => console.log(error)
     );
+  }
+
+  download(val:any){
+    var doc = new jsPDF();
+    doc.text('Bill', 50, 10);
+    doc.text('Transaction ID: ' + val.transactionID, 20, 3 * 10);
+    doc.text('Patient: ' + val.patientID, 20, 4 * 10);
+    doc.text('Date: ' + val.date, 20, 5 * 10);
+    doc.text('Transaction Amount: ' + val.amount, 20, 6 * 10);
+    doc.save('Bill_' + val.patientID + '.pdf');
   }
 }

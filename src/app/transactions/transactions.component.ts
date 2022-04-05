@@ -75,7 +75,7 @@ export class TransactionsComponent implements OnInit {
     } else if(this.tokenStorageService.getUser().roles.includes('ROLE_PATIENT')){
       this.stateService.fetchTransactionOfPatient(this.tokenStorageService.getUserID()).subscribe((res) => {
         console.log('Patient Transactions:', res);
-        this.transactionData = res.filter((val:any) => val.status=="completed_transaction" || val.status == "finished_transaction");
+        this.transactionData = res.filter((val:any) => val.status=="completed_transaction" || val.status == "finished_transaction" || val.status =="completed");
   
         this.displayedColumns= [
           'position',

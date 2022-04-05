@@ -19,7 +19,7 @@
         style="width: 40%"
       >
         <div class="form-group">
-          <label for="username">Username</label>
+          <label for="username">Email Id</label>
           <input
             type="text"
             class="form-control"
@@ -60,6 +60,26 @@
             </div>
           </div>
         </div>
+
+
+        <div class="container-fluid py-3">
+          <form #form2="ngForm">
+            <div class="row mt-3" style="margin-left: -30px;">
+              <div class="col-sm-12 mb-2">
+                <re-captcha id="recaptcha" name="recaptcha" #recaptcha="ngModel" [(ngModel)]="token" required [class.is-invalid]="tokenError"></re-captcha>
+                <div *ngIf="tokenError" class="invalid-feedback">
+                  <div *ngIf="tokenError">This field is required.</div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="row">
+              <div class="col-sm-12 mb-2">
+                <button type="button" class="btn btn-sm btn-primary" (click)="send(form2)">Send</button>
+              </div>
+            </div> -->
+          </form>
+        </div>
+
         <div class="form-group">
           <button class="btn btn-primary btn-block">Login</button>
         </div>
@@ -74,7 +94,8 @@
         </div>
       </form>
     </div>
-    <div *ngIf="isLoggedIn && !isOTPSucess">
+    
+    <div style="width: 40%;" *ngIf="isLoggedIn && !isOTPSucess">
       <app-auth2f [email]="email" (authStatusEvent)="auth2fCheck($event)"></app-auth2f>
     </div>
     <div class="alert alert-success" *ngIf="isOTPSucess">

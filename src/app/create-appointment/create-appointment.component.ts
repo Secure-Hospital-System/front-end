@@ -52,12 +52,18 @@ export class CreateAppointmentComponent implements OnInit {
     this.availableAppointment.sort(function (a: any, b: any) {
       return a.date > b.date ? 1 : -1;
     });
+    var newList = [];
+    for(let i=0;i<7;i++){
+      newList.push(this.availableAppointment[i]);
+    }
+    this.availableAppointment = newList;
     console.log(this.availableAppointment);
   }
 
   onDateSelect(event: any) {
     this.selectedDate = event.value;
   }
+
   dateSelected(source: any) {
     console.log(source.value);
     this.availableTime = this.appointmentData.filter(

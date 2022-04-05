@@ -323,7 +323,7 @@ export class StateService {
   // Fetch List of All Doctors
 
   fetchAllDoctors() {
-    this.http.get(SERVER_API + '/api/test/fetchAllDoctors').subscribe(
+    this.http.get(SERVER_API + '/api/fetchAllDoctors').subscribe(
       (res) => (this.doctors = res),
       (error) => console.log(error)
     );
